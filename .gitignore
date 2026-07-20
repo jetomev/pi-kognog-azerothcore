@@ -1,0 +1,39 @@
+# ── Game data: NEVER commit. Copyrighted Blizzard material. ──────────────
+*.MPQ
+*.mpq
+/Data/
+/dbc/
+/maps/
+/vmaps/
+/mmaps/
+/Cameras/
+/Buildings/
+*.wdt
+*.adt
+*.m2
+*.wmo
+realmlist.wtf
+
+# ── Build / server artifacts ──────────────────────────────────────────────
+build/
+bin/
+*.o
+*.so
+*.log
+/env/
+worldserver.conf
+authserver.conf
+playerbots.conf
+*.conf.local
+
+# ── Secrets ───────────────────────────────────────────────────────────────
+.env
+*.pem
+*.key
+credentials*
+
+# ── OS / editors ──────────────────────────────────────────────────────────
+.DS_Store
+*.swp
+.vscode/
+.idea/

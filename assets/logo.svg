@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="pi-kognog-azerothcore">
+  <defs>
+    <linearGradient id="frost" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A8E6FF"/>
+      <stop offset="0.55" stop-color="#7FD4F5"/>
+      <stop offset="1" stop-color="#3FA9E0"/>
+    </linearGradient>
+    <linearGradient id="abyss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B1A2A"/>
+      <stop offset="1" stop-color="#05101B"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- shield / crest -->
+  <path d="M128 12 L226 52 v78 c0 52-40 90-98 114-58-24-98-62-98-114V52Z"
+        fill="url(#abyss)" stroke="url(#frost)" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- frost rune: six-point star -->
+  <g filter="url(#glow)" stroke="url(#frost)" stroke-width="7" stroke-linecap="round" fill="none">
+    <line x1="128" y1="66" x2="128" y2="186"/>
+    <line x1="76"  y1="96" x2="180" y2="156"/>
+    <line x1="180" y1="96" x2="76"  y2="156"/>
+    <!-- barbs -->
+    <path d="M128 84 l-14 -14 M128 84 l14 -14"/>
+    <path d="M128 168 l-14 14 M128 168 l14 14"/>
+    <path d="M92 105 l-19 -2 M92 105 l4 -19"/>
+    <path d="M164 147 l19 2 M164 147 l-4 19"/>
+    <path d="M164 105 l19 -2 M164 105 l-4 -19"/>
+    <path d="M92 147 l-19 2 M92 147 l4 19"/>
+  </g>
+
+  <!-- core -->
+  <circle cx="128" cy="126" r="11" fill="#E8F1F5" filter="url(#glow)"/>
+</svg>

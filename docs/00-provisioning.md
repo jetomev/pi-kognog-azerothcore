@@ -322,6 +322,19 @@ Reading the card to a file is non-destructive; the only dangerous direction is w
 *back*. Keep this image **out of any git repository** — it contains host keys and your
 provisioned state.
 
+**Then put the Pi back together.** When the image finishes, safely eject the card,
+**return the microSD to the Pi**, and power it back on. Give it a minute, then reconnect
+from your desktop:
+
+```
+desktop $ sudo eject /dev/sdX          # replace with your card device; safely flush + eject
+# move the microSD from the desktop back into the Pi, power on, wait ~1 min
+desktop $ ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
+```
+
+The Pi boots straight back to `tpgaming01` at its static address — the image was a copy,
+the card itself is unchanged.
+
 ---
 
 ## ✅ Checkpoint

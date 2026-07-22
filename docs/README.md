@@ -21,6 +21,22 @@ Every chapter follows the same shape, so you always know where you are:
 - Paths are absolute wherever ambiguity is possible.
 - Anything that takes more than a few minutes says so, with a rough duration, so you know the difference between "slow" and "hung".
 
+## Connecting to your server
+
+Every chapter from 02 onward runs **on the Pi**, so each one opens with the same
+reminder: get an SSH session first. From your desktop:
+
+```
+ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
+```
+
+(Substitute your key path and the static IP you set in Chapter 00.) Enter your key
+passphrase; you should land at `tphome@tpgaming01:~$`. A graphical SSH client such as
+**Termius** works too — point it at the same host, user, and key. If the connection is
+refused, confirm the Pi is powered on and reachable (`ping 192.168.1.220`); if it asks
+for a password instead of the key, see the `Permission denied (publickey)` entry in
+[TROUBLESHOOTING.md](TROUBLESHOOTING.md).
+
 ## Chapter list
 
 | # | Chapter | Status |

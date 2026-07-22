@@ -26,7 +26,7 @@ Every chapter follows the same shape, so you always know where you are:
 | # | Chapter | Status |
 |---|---------|--------|
 | 00 | [Provisioning the Pi](00-provisioning.md) | ✅ done |
-| 01 | The client and extracting game data | ☐ |
+| 01 | [The client and extracting game data](01-client-and-data.md) | ✅ done |
 | 02 | ARM64 build toolchain and dependencies | ☐ |
 | 03 | MariaDB and the three databases | ☐ |
 | 04 | Cloning AzerothCore + the Playerbots fork | ☐ |

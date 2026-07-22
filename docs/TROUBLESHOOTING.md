@@ -133,6 +133,106 @@ context, or `-i` was pointed at the `.pub` (public) file instead of the private 
 
 ---
 
+### jemalloc fails to compile: `'__throw_bad_alloc' is not a member of 'std'`
+
+**Chapter:** 01
+**Symptom:** Building the extractor tools dies on the bundled jemalloc:
+
+```
+deps/jemalloc/src/jemalloc_cpp.cpp:70:22: error:
+  '__throw_bad_alloc' is not a member of 'std'; did you mean '__throw_bad_cast'?
+make: *** [map_extractor] Error 2
+```
+
+**Cause:** AzerothCore vendors an old copy of the jemalloc allocator whose C++ shim used
+a libstdc++ internal that **new compilers no longer expose** (seen on GCC 16). It has
+nothing to do with the extractors — they do not even need jemalloc.
+
+**Fix:** Disable jemalloc at configure time. It is a supported AzerothCore option:
+
+```
+cmake .. -DNOJEM=1  ...   # (re-run cmake with the flag, then rebuild)
+```
+
+On an older/stable toolchain (e.g. Ubuntu's default GCC) you may never hit this and can
+omit the flag.
+
+**ARM64-specific:** no (compiler-version-specific)
+
+---
+
+### `MYSQL_INCLUDE_DIR-NOTFOUND` when building only the tools
+
+**Chapter:** 01
+**Symptom:**
+
+```
+CMake Error in src/server/database/CMakeLists.txt:
+  Imported target "mysql" includes non-existent path "MYSQL_INCLUDE_DIR-NOTFOUND"
+```
+
+**Cause:** AzerothCore's top-level CMake adds the `server` directory **unconditionally**,
+and its database component checks for MySQL/MariaDB client headers — even when you only
+intend to build the extractor tools.
+
+**Fix:** Install the MariaDB client library so the header check passes. You do **not**
+need a running database on this machine.
+
+```
+sudo pacman -S --needed mariadb-libs      # Arch
+# Debian/Ubuntu equivalent: libmariadb-dev  (or default-libmysqlclient-dev)
+```
+
+**ARM64-specific:** no
+
+---
+
+### `-DTOOLS=1` is ignored / CMake builds the whole server
+
+**Chapter:** 01
+**Symptom:** You pass `-DTOOLS=1 -DSERVERS=0`, CMake warns they are "unused", and it
+configures the full server anyway.
+
+**Cause:** Those are not the current option names. AzerothCore selects tools with a
+**string** variable, `TOOLS_BUILD`.
+
+**Fix:**
+
+```
+cmake .. -DTOOLS_BUILD=all -DSCRIPTS=none ...
+```
+
+`TOOLS_BUILD=all` builds every tool; you can also name specific ones. Confirm the CMake
+output shows a "Tools build list" including `map_extractor`, `vmap4_extractor`,
+`vmap4_assembler`, `mmaps_generator`.
+
+**ARM64-specific:** no
+
+---
+
+### `mmaps_generator` aborts: "Failed to load configuration ... mmaps-config.yaml"
+
+**Chapter:** 01
+**Symptom:**
+
+```
+Failed to load configuration. Ensure that 'mmaps-config.yaml' exists in the current
+directory or specify its path using the --config option.
+```
+
+**Cause:** Current `mmaps_generator` requires a config file that older versions did not.
+It looks for `mmaps-config.yaml` in the working directory.
+
+**Fix:** Copy it from the source tree into your extraction workspace before running:
+
+```
+cp ~/azerothcore-tools/src/tools/mmaps_generator/mmaps-config.yaml .
+```
+
+**ARM64-specific:** no
+
+---
+
 ## Hit something we did not?
 
 Open an issue with the chapter number, the command you ran, and the **complete** error output. If you already solved it, say so and it gets added here with credit to you.

@@ -42,7 +42,7 @@ This one is different in two ways:
 | # | Chapter | Status |
 |---|---------|--------|
 | 00 | [Provisioning the Pi (bare metal to ready host)](docs/00-provisioning.md) | ✅ done |
-| 01 | The client and extracting game data (maps, vmaps, mmaps) | ☐ not started |
+| 01 | [The client and extracting game data (maps, vmaps, mmaps)](docs/01-client-and-data.md) | ✅ done |
 | 02 | ARM64 build toolchain and dependencies | ☐ not started |
 | 03 | MariaDB and the three databases | ☐ not started |
 | 04 | Cloning AzerothCore + the Playerbots fork | ☐ not started |

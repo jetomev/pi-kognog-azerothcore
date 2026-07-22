@@ -22,9 +22,114 @@ The `ARM64-specific` flag matters: it tells an x86 reader whether an entry is re
 
 ## Entries
 
-*None yet. The realm has not been built.*
+### NVMe not detected (`link down`), even with the HAT LEDs lit
 
-Entries appear here from Chapter 00 onward, as we hit them.
+**Chapter:** 00
+**Symptom:** No `nvme0n1` in `lsblk`. The kernel log shows the external PCIe port
+finding nothing:
+
+```
+brcm-pcie 1000110000.pcie: Forcing gen 2
+brcm-pcie 1000110000.pcie: link down
+brcm-pcie 1000120000.pcie: link up, 5.0 GT/s PCIe x4
+```
+
+The HAT's LEDs were on the whole time, which made it look like the drive should work.
+
+**Cause:** Two separate traps, both of which cost us two days:
+1. **The HAT's LEDs are not wired to the PCIe link.** On a PoE / self-powered HAT the
+   LEDs light from that power source the instant it is present, completely independent
+   of whether an NVMe is connected, seated, or alive. "Lights on" tells you the HAT has
+   power and **nothing** about the drive.
+2. **The drives themselves were the fault.** We had three NVMe sticks that would not
+   enumerate on any Pi or HAT, while a known-good drive worked in every slot. Bad or
+   incompatible drives produce exactly this `link down`, silently.
+
+Note the two PCIe controllers in the log: `1000120000` (internal, the RP1 I/O chip)
+always trains — that is not your drive. `1000110000` is the **external** slot; that is
+the one that must say `link up` for your HAT.
+
+**Fix:** Isolate methodically, and do not trust the LEDs.
+- Confirm the stick is **NVMe (one notch), not SATA (two notches)**. A SATA M.2 stick
+  will never work in an NVMe HAT.
+- Swap in a **known-good NVMe** in the same slot. If it enumerates, the original drive
+  was the fault.
+- Move a drive to a **different Pi/HAT**, or into a desktop M.2 slot, to prove whether
+  the drive or the HAT is at fault.
+- `config.txt` needs **no** special PCIe setting for a standard HAT on a Pi 5 — the
+  external port initialises on its own. If the port says `link down`, the problem is
+  physical (drive, seating, or HAT), not configuration. Do not go editing `config.txt`.
+
+**ARM64-specific:** yes
+
+---
+
+### Raspberry Pi Imager "customisation" options are greyed out
+
+**Chapter:** 00
+**Symptom:** In Raspberry Pi Imager, after choosing an **Ubuntu** image, the OS
+customisation dialog (hostname, user, SSH, Wi-Fi) is present but unavailable — you
+cannot fill it in.
+
+**Cause:** Imager's built-in customisation is a **Raspberry Pi OS** feature. It does not
+apply to Ubuntu images. Ubuntu configures itself from a **cloud-init `user-data`** file
+on the boot partition instead.
+
+**Fix:** Flash the Ubuntu image, then edit `user-data` on the `system-boot` partition as
+shown in Chapter 00, Step 3. Do not look for the setting in Imager; it will never be
+available for Ubuntu.
+
+**ARM64-specific:** no (Raspberry-Pi-specific)
+
+---
+
+### Telling Ubuntu Desktop from Server after flashing
+
+**Chapter:** 00
+**Symptom:** You are not sure whether you flashed Ubuntu **Server** or **Desktop** (it
+matters — Desktop drags in a GUI you will never use on a headless server).
+
+**Cause:** The download name is easy to misremember, and both boot to a similar first
+prompt over serial/console.
+
+**Fix:** Do not trust the filename; inspect the installed system:
+
+```
+dpkg -l | grep -E 'ubuntu-desktop|gdm3|gnome-shell'   # Server: no output
+df -h /                                                # Server root is far smaller
+```
+
+If desktop packages are present, reflash with the **Server** edition.
+
+**ARM64-specific:** no
+
+---
+
+### `Permission denied (publickey)` on the first SSH
+
+**Chapter:** 00
+**Symptom:**
+
+```
+tphome@192.168.1.x: Permission denied (publickey).
+```
+
+The Pi is up and pingable, and password auth is (correctly) disabled.
+
+**Cause:** Usually a **client-side** problem, not the Pi. The server offering
+publickey-only is exactly what we configured. Common causes: the private key is
+passphrase-protected and no `ssh-agent` is running to supply it in a non-interactive
+context, or `-i` was pointed at the `.pub` (public) file instead of the private key.
+
+**Fix:**
+- Point `-i` at the **private** key (the file **without** `.pub`):
+  `ssh -i ~/.ssh/id_ed25519_tpgaming tphome@<ip>` and enter the passphrase when asked.
+- Verify the key is the right one and, if you expected agent-based auth,
+  `ssh-add ~/.ssh/id_ed25519_tpgaming` first.
+- Only after ruling out the client should you suspect the Pi. A `Permission denied
+  (publickey)` is not proof the machine is misconfigured.
+
+**ARM64-specific:** no
 
 ---
 

@@ -41,7 +41,7 @@ This one is different in two ways:
 
 | # | Chapter | Status |
 |---|---------|--------|
-| 00 | Provisioning the Pi (bare metal to ready host) | ☐ not started |
+| 00 | [Provisioning the Pi (bare metal to ready host)](docs/00-provisioning.md) | ✅ done |
 | 01 | The client and extracting game data (maps, vmaps, mmaps) | ☐ not started |
 | 02 | ARM64 build toolchain and dependencies | ☐ not started |
 | 03 | MariaDB and the three databases | ☐ not started |
@@ -69,7 +69,7 @@ You need your own 3.3.5a (12340) client. Every map, model, and DBC file in this 
 
 | | |
 |---|---|
-| **Host** | Raspberry Pi 5, 16 GB RAM (`tphome03`) |
+| **Host** | Raspberry Pi 5, 16 GB RAM (`tpgaming01`, `192.168.1.220`) |
 | **OS** | Ubuntu Server (ARM64), running from the microSD |
 | **Storage** | 64 GB microSD (OS) + 500 GB NVMe on a HAT (game data, build, databases) |
 | **Arch** | ARM64 / aarch64 |

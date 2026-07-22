@@ -15,7 +15,7 @@ Every chapter follows the same shape, so you always know where you are:
 
 ## Conventions
 
-- Commands that must run **on the Pi** are marked `tphome03 $`.
+- Commands that must run **on the Pi** are marked `tpgaming01 $`.
 - Commands that must run **on your desktop** are marked `desktop $`.
 - Commands needing root are shown with `sudo` explicitly. Nothing is silently elevated.
 - Paths are absolute wherever ambiguity is possible.
@@ -25,7 +25,7 @@ Every chapter follows the same shape, so you always know where you are:
 
 | # | Chapter | Status |
 |---|---------|--------|
-| 00 | Provisioning the Pi | ☐ |
+| 00 | [Provisioning the Pi](00-provisioning.md) | ✅ done |
 | 01 | The client and extracting game data | ☐ |
 | 02 | ARM64 build toolchain and dependencies | ☐ |
 | 03 | MariaDB and the three databases | ☐ |

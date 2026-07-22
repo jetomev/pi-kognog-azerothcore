@@ -1,0 +1,33 @@
+#cloud-config
+# Ubuntu Server on a Raspberry Pi reads this file from the FAT `system-boot`
+# partition at first boot. Copy it over the stock `user-data`, edit the marked
+# values, and the Pi configures itself headless — no monitor, no keyboard.
+#
+# See docs/00-provisioning.md, Step 3, for the full explanation.
+
+hostname: tpgaming01              # <-- your host name
+manage_etc_hosts: true
+timezone: America/New_York        # <-- your timezone
+locale: en_US.UTF-8
+
+users:
+  - name: tphome                  # <-- your username
+    groups: [adm, sudo]
+    shell: /bin/bash
+    lock_passwd: true             # no password at all; login is key-only
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    ssh_authorized_keys:
+      # <-- paste YOUR public key here: `cat ~/.ssh/id_ed25519_tpgaming.pub`
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA_REPLACE_WITH_YOUR_PUBLIC_KEY you@tpgaming01
+
+ssh_pwauth: false                 # no password logins over SSH
+disable_root: true                # no root logins
+
+packages:
+  - avahi-daemon                  # so <hostname>.local can resolve on the LAN
+
+# Note: we intentionally do NOT set a static IP here. DHCP is kept for the first
+# boot; the static address is set later, from a working SSH session, where a
+# mistake is recoverable. See docs/00-provisioning.md, Step 6.
+
+final_message: "tpgaming01 is up after $UPTIME seconds. cloud-init done."

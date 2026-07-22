@@ -4,12 +4,17 @@ Every problem we actually hit, with the exact error text and what fixed it. Entr
 
 Search this file by the error message. That is how you will arrive here.
 
+**Jump to a chapter:**
+[00 — Provisioning](#chapter-00--provisioning-the-pi) ·
+[01 — Client & game data](#chapter-01--the-client-and-extracting-game-data)
+
 ## How entries are written
+
+Entries are grouped under the chapter they occurred in. Each one looks like:
 
 ```
 ### <short symptom>
 
-**Chapter:** which chapter it happened in
 **Symptom:** the literal error output, verbatim
 **Cause:** what was actually wrong
 **Fix:** the commands or change that resolved it
@@ -20,11 +25,10 @@ The `ARM64-specific` flag matters: it tells an x86 reader whether an entry is re
 
 ---
 
-## Entries
+## Chapter 00 — Provisioning the Pi
 
 ### NVMe not detected (`link down`), even with the HAT LEDs lit
 
-**Chapter:** 00
 **Symptom:** No `nvme0n1` in `lsblk`. The kernel log shows the external PCIe port
 finding nothing:
 
@@ -66,7 +70,6 @@ the one that must say `link up` for your HAT.
 
 ### Raspberry Pi Imager "customisation" options are greyed out
 
-**Chapter:** 00
 **Symptom:** In Raspberry Pi Imager, after choosing an **Ubuntu** image, the OS
 customisation dialog (hostname, user, SSH, Wi-Fi) is present but unavailable — you
 cannot fill it in.
@@ -85,7 +88,6 @@ available for Ubuntu.
 
 ### Telling Ubuntu Desktop from Server after flashing
 
-**Chapter:** 00
 **Symptom:** You are not sure whether you flashed Ubuntu **Server** or **Desktop** (it
 matters — Desktop drags in a GUI you will never use on a headless server).
 
@@ -107,7 +109,6 @@ If desktop packages are present, reflash with the **Server** edition.
 
 ### `Permission denied (publickey)` on the first SSH
 
-**Chapter:** 00
 **Symptom:**
 
 ```
@@ -133,9 +134,10 @@ context, or `-i` was pointed at the `.pub` (public) file instead of the private 
 
 ---
 
+## Chapter 01 — The client and extracting game data
+
 ### jemalloc fails to compile: `'__throw_bad_alloc' is not a member of 'std'`
 
-**Chapter:** 01
 **Symptom:** Building the extractor tools dies on the bundled jemalloc:
 
 ```
@@ -163,7 +165,6 @@ omit the flag.
 
 ### `MYSQL_INCLUDE_DIR-NOTFOUND` when building only the tools
 
-**Chapter:** 01
 **Symptom:**
 
 ```
@@ -189,7 +190,6 @@ sudo pacman -S --needed mariadb-libs      # Arch
 
 ### `-DTOOLS=1` is ignored / CMake builds the whole server
 
-**Chapter:** 01
 **Symptom:** You pass `-DTOOLS=1 -DSERVERS=0`, CMake warns they are "unused", and it
 configures the full server anyway.
 
@@ -212,7 +212,6 @@ output shows a "Tools build list" including `map_extractor`, `vmap4_extractor`,
 
 ### `mmaps_generator` aborts: "Failed to load configuration ... mmaps-config.yaml"
 
-**Chapter:** 01
 **Symptom:**
 
 ```

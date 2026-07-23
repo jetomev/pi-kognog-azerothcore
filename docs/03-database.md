@@ -99,6 +99,13 @@ tpgaming01 $ sudo ss -tlnp | grep 3306
   `information_schema` — not the system databases, because `acore` is scoped to its own.
 - `ss` should show `127.0.0.1:3306` — bound to localhost, not `0.0.0.0`.
 
+> **A note if you watched a MySQL tutorial:** many AzerothCore videos tell you to
+> **disable the binary log** (`log_bin`), warning it grows without bound and fills your
+> disk. That is true for **MySQL 8**, where binary logging is **on by default**. It is
+> **not** true here — **MariaDB leaves `log_bin` off by default**, so there is nothing to
+> disable. Confirm with `sudo mariadb -e "SHOW VARIABLES LIKE 'log_bin';"` (expect
+> `OFF`). One more quiet benefit of choosing MariaDB.
+
 ## ✅ Checkpoint
 
 Chapter 03 is done when:

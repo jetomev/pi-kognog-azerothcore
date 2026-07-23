@@ -46,7 +46,7 @@ for a password instead of the key, see the `Permission denied (publickey)` entry
 | 02 | [ARM64 build toolchain and dependencies](02-build-toolchain.md) | ✅ done |
 | 03 | [MariaDB and the three databases](03-database.md) | ✅ done |
 | 04 | [Cloning AzerothCore + the Playerbots fork](04-cloning.md) | ✅ done |
-| 05 | Building | ☐ |
+| 05 | [Building](05-building.md) | ✅ done |
 | 06 | Configuration | ☐ |
 | 07 | First boot | ☐ |
 | 08 | The client side | ☐ |

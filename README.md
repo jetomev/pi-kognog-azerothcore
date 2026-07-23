@@ -46,7 +46,7 @@ This one is different in two ways:
 | 02 | [ARM64 build toolchain and dependencies](docs/02-build-toolchain.md) | ✅ done |
 | 03 | [MariaDB and the three databases](docs/03-database.md) | ✅ done |
 | 04 | [Cloning AzerothCore + the Playerbots fork](docs/04-cloning.md) | ✅ done |
-| 05 | Building (the long one) | ☐ not started |
+| 05 | [Building (the long one)](docs/05-building.md) | ✅ done |
 | 06 | Configuration: worldserver, authserver, playerbots | ☐ not started |
 | 07 | First boot: accounts, GM, realm | ☐ not started |
 | 08 | The client side: connecting and the realmlist | ☐ not started |

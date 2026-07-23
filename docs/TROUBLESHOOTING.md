@@ -7,7 +7,8 @@ Search this file by the error message. That is how you will arrive here.
 **Jump to a chapter:**
 [00 — Provisioning](#chapter-00--provisioning-the-pi) ·
 [01 — Client & game data](#chapter-01--the-client-and-extracting-game-data) ·
-[04 — Cloning](#chapter-04--cloning-azerothcore--the-playerbots-fork)
+[04 — Cloning](#chapter-04--cloning-azerothcore--the-playerbots-fork) ·
+[05 — Building](#chapter-05--building)
 
 ## How entries are written
 
@@ -261,6 +262,39 @@ README on GitHub and use the clone commands it shows — this project relocates 
 renames branches over time.
 
 **ARM64-specific:** no
+
+---
+
+## Chapter 05 — Building
+
+### The build dies with `Killed` (out of memory)
+
+**Symptom:** The compile stops partway with something like:
+
+```
+c++: fatal error: Killed signal terminated program cc1plus
+make[2]: *** [...] Error 1
+```
+
+or the process simply reports `Killed`. It often happens on the heaviest files
+(Playerbots AI, or the final `worldserver` link).
+
+**Cause:** The Pi ran out of memory. Parallel compiles (`-j4`) can briefly spike past
+available RAM, and with no swap the kernel kills the compiler. Smaller Pis (8 GB, 4 GB)
+hit this readily.
+
+**Fix:** two levers, use both if needed.
+1. **Add swap** (Chapter 05, Step 1) — an 8 GB swapfile is enough to absorb the spikes on
+   a 16 GB Pi.
+2. **Reduce parallelism** — rebuild with fewer jobs so fewer heavy files compile at once:
+   ```
+   make -j2      # or -j1 on a 4 GB Pi
+   ```
+   The build tree is preserved, so it resumes from where it stopped rather than starting
+   over.
+
+**ARM64-specific:** yes (a Raspberry Pi memory-constraint issue; the same build on a
+big-RAM x86 box would not hit it)
 
 ---
 

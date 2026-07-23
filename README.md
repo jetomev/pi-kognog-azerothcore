@@ -11,13 +11,13 @@
 
 ---
 
-## <img src="assets/icons/what-this-is.png" height="30" alt=""> What this is
+## <img src="assets/icons/what-this-is.png" height="48" alt=""> What this is
 
 A **step-by-step, verified guide** to running your own **World of Warcraft: Wrath of the Lich King (3.3.5a)** server with **AzerothCore + Playerbots**, on a **Raspberry Pi 5 (ARM64)**, for solo play with a bot party.
 
 It is written for someone who has never done this before. Every chapter assumes nothing, explains what each piece *is* before telling you to install it, and ends with a **checkpoint** so you know whether it worked before moving on.
 
-## <img src="assets/icons/why-this-guide-exists.png" height="30" alt=""> Why this guide exists
+## <img src="assets/icons/why-this-guide-exists.png" height="48" alt=""> Why this guide exists
 
 There are many AzerothCore tutorials. Almost all of them are **x86_64**, and most are transcribed from someone else's video.
 
@@ -28,7 +28,7 @@ This one is different in two ways:
 
 > **Current status: not finished.** The realm is not up yet. Chapters appear as they are completed and verified. If a chapter is not listed below, it has not been written, because it has not been done.
 
-## <img src="assets/icons/the-guide.png" height="30" alt=""> The guide
+## <img src="assets/icons/the-guide.png" height="48" alt=""> The guide
 
 | # | Chapter | Status |
 |---|---------|--------|
@@ -48,7 +48,7 @@ This one is different in two ways:
 
 Alongside them: **[Troubleshooting](docs/TROUBLESHOOTING.md)** (every error we actually hit, with the fix) and **[Q&A](docs/QA.md)**.
 
-## <img src="assets/icons/prerequisite-zero.png" height="30" alt=""> Prerequisite zero: the client
+## <img src="assets/icons/prerequisite-zero.png" height="48" alt=""> Prerequisite zero: the client
 
 AzerothCore is a **3.3.5a server, client build 12340** (2010). This matters more than anything else on this page:
 
@@ -58,7 +58,7 @@ AzerothCore is a **3.3.5a server, client build 12340** (2010). This matters more
 
 You need your own 3.3.5a (12340) client. Every map, model, and DBC file in this guide is extracted from it. Sourcing it is your responsibility and outside the scope of this guide; we do not link or distribute it.
 
-## <img src="assets/icons/the-hardware.png" height="30" alt=""> The hardware
+## <img src="assets/icons/the-hardware.png" height="48" alt=""> The hardware
 
 | | |
 |---|---|
@@ -70,7 +70,7 @@ You need your own 3.3.5a (12340) client. Every map, model, and DBC file in this 
 
 A note on scale, honestly: this sizing is for **solo play**. A 4-man party on a Pi 5 is comfortable. A populated world with dozens of bots is a different machine's problem; Playerbots is CPU-hungry and the Pi has four cores.
 
-## <img src="assets/icons/brand.png" height="30" alt=""> Brand
+## <img src="assets/icons/brand.png" height="48" alt=""> Brand
 
 Northrend, in a terminal.
 
@@ -83,20 +83,20 @@ Northrend, in a terminal.
 | Rune glow | `#A8E6FF` | emphasis |
 | Bone | `#E8F1F5` | text |
 
-## <img src="assets/icons/contributing.png" height="30" alt=""> Contributing
+## <img src="assets/icons/contributing.png" height="48" alt=""> Contributing
 
 Hit a problem this guide did not cover? **Open an issue.** Solved it yourself? **Open an issue anyway and tell us how**, and it goes into the troubleshooting file with credit. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 That last 5% (the problems we will never hit on our own hardware) only gets documented if people bring them back.
 
-## <img src="assets/icons/authors.png" height="30" alt=""> Authors
+## <img src="assets/icons/authors.png" height="48" alt=""> Authors
 
 A human and an AI, working as co-authors:
 
 - **Balih Kognog** — direction, hardware, testing, the decision to wipe it all and do it again.
 - **Auren Vael** (Claude, Anthropic) — architecture, drafting, and keeping the archive honest. 🪶
 
-## <img src="assets/icons/license.png" height="30" alt=""> License
+## <img src="assets/icons/license.png" height="48" alt=""> License
 
 GPL-3.0-or-later. See [LICENSE](LICENSE).
 

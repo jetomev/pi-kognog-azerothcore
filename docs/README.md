@@ -47,7 +47,7 @@ for a password instead of the key, see the `Permission denied (publickey)` entry
 | 03 | [MariaDB and the three databases](03-database.md) | ✅ done |
 | 04 | [Cloning AzerothCore + the Playerbots fork](04-cloning.md) | ✅ done |
 | 05 | [Building](05-building.md) | ✅ done |
-| 06 | Configuration | ☐ |
+| 06 | [Configuration](06-configuration.md) | ✅ done |
 | 07 | First boot | ☐ |
 | 08 | The client side | ☐ |
 | 09 | Your bot party | ☐ |

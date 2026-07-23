@@ -53,6 +53,8 @@ This one is different in two ways:
 | 09 | Your bot party (tank, healer, two dps) | ☐ not started |
 | 10 | Keeping it alive: services, backups, updates | ☐ not started |
 
+**Optional:** **[Adding modules](docs/optional-modules.md)** — an auction-house bot (`mod-ah-bot`), quality-of-life modules, difficulty scaling, and the reusable pattern for adding any module. Tackled *after* the base realm works.
+
 Alongside them: **[Troubleshooting](docs/TROUBLESHOOTING.md)** (every error we actually hit, with the fix) and **[Q&A](docs/QA.md)**.
 
 ## Prerequisite zero: the client

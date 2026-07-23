@@ -53,6 +53,8 @@ for a password instead of the key, see the `Permission denied (publickey)` entry
 | 09 | Your bot party | ☐ |
 | 10 | Keeping it alive | ☐ |
 
+**Optional:** [Adding modules](optional-modules.md) — an auction-house bot, quality-of-life tweaks, difficulty scaling, and the reusable "how to add any module" pattern. Done *after* the base realm works.
+
 ## The validation loop
 
 This guide is not finished when the server runs. It is finished when the guide **builds the server from nothing, unaided**.

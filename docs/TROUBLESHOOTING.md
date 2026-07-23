@@ -6,7 +6,8 @@ Search this file by the error message. That is how you will arrive here.
 
 **Jump to a chapter:**
 [00 — Provisioning](#chapter-00--provisioning-the-pi) ·
-[01 — Client & game data](#chapter-01--the-client-and-extracting-game-data)
+[01 — Client & game data](#chapter-01--the-client-and-extracting-game-data) ·
+[04 — Cloning](#chapter-04--cloning-azerothcore--the-playerbots-fork)
 
 ## How entries are written
 
@@ -227,6 +228,37 @@ It looks for `mmaps-config.yaml` in the working directory.
 ```
 cp ~/azerothcore-tools/src/tools/mmaps_generator/mmaps-config.yaml .
 ```
+
+**ARM64-specific:** no
+
+---
+
+## Chapter 04 — Cloning AzerothCore + the Playerbots fork
+
+### Playerbots won't build / bots never appear — you cloned the wrong repository
+
+**Symptom:** The module fails to configure or build, or the server runs but has no bots.
+You followed a guide that said to clone `liyunfan1223/azerothcore-wotlk` or plain
+`azerothcore/azerothcore-wotlk`.
+
+**Cause:** Two traps:
+1. **Upstream AzerothCore does not work with Playerbots.** The module needs core hooks
+   that only exist in the Playerbots fork.
+2. **The project moved.** The maintained source is now under the **`mod-playerbots`**
+   GitHub org, not the older `liyunfan1223` personal repositories that most tutorials
+   and videos still reference.
+
+**Fix:** Clone from the current, correct location, on the correct branches:
+
+```
+git clone https://github.com/mod-playerbots/azerothcore-wotlk.git --branch=Playerbot
+cd azerothcore-wotlk/modules
+git clone https://github.com/mod-playerbots/mod-playerbots.git --branch=master
+```
+
+If unsure whether these are still current, open the `mod-playerbots/mod-playerbots`
+README on GitHub and use the clone commands it shows — this project relocates and
+renames branches over time.
 
 **ARM64-specific:** no
 

@@ -1,15 +1,6 @@
 <div align="center">
 
-```
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║          P I - K O G N O G - A Z E R O T H C O R E           ║
-║                                                              ║
-║       Wrath of the Lich King  ·  3.3.5a  ·  Playerbots       ║
-║       A solo realm, raised by hand on a Raspberry Pi 5       ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-```
+<img src="assets/banner.png" alt="pi-kognog-azerothcore — Wrath of the Lich King · 3.3.5a · Playerbots · a solo realm raised by hand on a Raspberry Pi 5" width="100%">
 
 ![Status: in progress](https://img.shields.io/badge/Status-Building%20live-3FA9E0.svg)
 ![Platform: Raspberry Pi 5](https://img.shields.io/badge/Platform-Raspberry%20Pi%205%20(ARM64)-7FD4F5.svg)

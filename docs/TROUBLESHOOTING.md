@@ -7,8 +7,10 @@ Search this file by the error message. That is how you will arrive here.
 **Jump to a chapter:**
 [00 — Provisioning](#chapter-00--provisioning-the-pi) ·
 [01 — Client & game data](#chapter-01--the-client-and-extracting-game-data) ·
+[03 — Database](#chapter-03--mysql-and-the-databases) ·
 [04 — Cloning](#chapter-04--cloning-azerothcore--the-playerbots-fork) ·
-[05 — Building](#chapter-05--building)
+[05 — Building](#chapter-05--building) ·
+[07 — First boot](#chapter-07--first-boot)
 
 ## How entries are written
 
@@ -234,6 +236,110 @@ cp ~/azerothcore-tools/src/tools/mmaps_generator/mmaps-config.yaml .
 
 ---
 
+### `MMAP: … was built with generator v20, expected v19` (bots/creatures won't move)
+
+**Symptom:** The server boots, but the load is full of lines like:
+
+```
+MMAP:loadMap: 5712834.mmtile was built with generator v20, expected v19
+MoveSplineInitArgs::Validate: expression 'velocity > 0.01f' failed for GUID ...
+```
+
+Bots stand frozen or fail to path.
+
+**Cause:** The navigation meshes (`mmaps`) carry a format version. The **Playerbots fork
+expects v19**; **upstream AzerothCore's extractor produces v20**. If you built the Chapter
+01 extractor tools from upstream instead of the fork, every mmap tile is the wrong version
+and the server rejects them all — so there's no navmesh and nothing can move. (The
+`maps`/`vmaps` share a version and are unaffected; only `mmaps` break.)
+
+**Fix:** Regenerate the mmaps with the **fork's** `mmaps_generator`. On the desktop:
+
+```
+git clone --depth 1 --branch Playerbot https://github.com/mod-playerbots/azerothcore-wotlk.git ~/azeroth-fork
+cd ~/azeroth-fork && mkdir build && cd build
+cmake .. -DTOOLS_BUILD=all -DSCRIPTS=none -DNOJEM=1 -DCMAKE_BUILD_TYPE=Release
+make -j$(nproc) mmaps_generator
+# then, in your extraction workspace (with maps/ and vmaps/ present):
+cp ~/azeroth-fork/build/src/tools/mmaps_generator .
+cp ~/azeroth-fork/src/tools/mmaps_generator/mmaps-config.yaml .
+rm -rf mmaps && mkdir mmaps && ./mmaps_generator --threads $(( $(nproc) - 1 ))
+```
+
+Then re-transfer just the `mmaps` folder to the Pi (rsync with `--delete`). Confirm a tile
+header reads version 19: `od -An -tu4 -N16 mmaps/<any>.mmtile` (third number = 19). The
+better fix is to build the Chapter 01 tools from the fork in the first place.
+
+**ARM64-specific:** no
+
+---
+
+## Chapter 03 — MySQL and the databases
+
+### `AzerothCore does not support MySQL versions below 8.0` (you're on MariaDB)
+
+**Symptom:** worldserver connects to the database, then quits:
+
+```
+AzerothCore does not support MySQL versions below 8.0
+Found server version: 5.5.5-10.11.14-MariaDB. Server compiled with: 80046.
+```
+
+**Cause:** **AzerothCore dropped MariaDB support in September 2024** and requires MySQL
+8.0+. MariaDB reports its version with a legacy `5.5.5-` prefix, which AzerothCore reads as
+"below 8.0" and rejects. This is not a version-detection bug you can work around — MariaDB
+is genuinely unsupported.
+
+**Fix:** Replace MariaDB with MySQL 8.0 (Ubuntu's own repo; matches the client the server
+was built against). Your databases are recreated empty, so nothing is lost if you haven't
+booted yet:
+
+```
+sudo systemctl stop mariadb
+sudo apt purge -y mariadb-server mariadb-server-core
+sudo apt autoremove -y --purge
+sudo apt install -y mysql-server
+sudo systemctl enable --now mysql
+```
+
+Then recreate the databases (Chapter 03) and retry. **Do not** blanket-`rm -rf /etc/mysql`
+during this — see the next entry.
+
+**ARM64-specific:** no
+
+---
+
+### MySQL install fails: `Can't read dir of '/etc/mysql/conf.d/'`
+
+**Symptom:** Installing `mysql-server` aborts with:
+
+```
+mysqld: Can't read dir of '/etc/mysql/conf.d/' (OS errno 2 - No such file or directory)
+mysqld: [ERROR] Fatal error in defaults handling. Program aborted!
+dpkg: error processing package mysql-server-8.0
+```
+
+**Cause:** You ran `rm -rf /etc/mysql` while the `mysql-common` package was still installed.
+That deleted files the package owns; since the package wasn't reinstalled, they were never
+recreated, and MySQL's `my.cnf` `!includedir /etc/mysql/conf.d/` then points at a missing
+directory.
+
+**Fix:** Recreate the directory skeleton, restore the config, and finish the install:
+
+```
+sudo mkdir -p /etc/mysql/conf.d /etc/mysql/mysql.conf.d
+sudo apt install --reinstall -y mysql-common
+sudo dpkg --configure -a
+sudo apt --fix-broken install -y
+sudo systemctl restart mysql
+```
+
+Avoid the blanket `rm -rf` in the first place — a targeted `apt purge` is enough.
+
+**ARM64-specific:** no
+
+---
+
 ## Chapter 04 — Cloning AzerothCore + the Playerbots fork
 
 ### Playerbots won't build / bots never appear — you cloned the wrong repository
@@ -295,6 +401,68 @@ hit this readily.
 
 **ARM64-specific:** yes (a Raspberry Pi memory-constraint issue; the same build on a
 big-RAM x86 box would not hit it)
+
+---
+
+## Chapter 07 — First boot
+
+### `Access denied ... 'acore_playerbots'` then `Segmentation fault (core dumped)`
+
+**Symptom:** The world imports successfully, then:
+
+```
+Opening DatabasePool 'acore_playerbots'.
+Could not connect to MySQL database at 127.0.0.1: Access denied for user 'acore'@'localhost' to database 'acore_playerbots'
+DatabasePool Playerbots NOT opened.
+Segmentation fault (core dumped)
+```
+
+**Cause:** Playerbots uses a **fourth database, `acore_playerbots`**, on top of the standard
+three. If you created only auth/characters/world, the module can't open its database and
+the server crashes.
+
+**Fix:** Create the fourth database and grant the `acore` user access, then retry:
+
+```
+sudo mysql <<'SQL'
+CREATE DATABASE IF NOT EXISTS `acore_playerbots` DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON `acore_playerbots` . * TO 'acore'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+SQL
+```
+
+**ARM64-specific:** no
+
+---
+
+### `Can't set process priority class, error: Permission denied`
+
+**Symptom:** This line appears under the banner every start.
+
+**Cause:** `worldserver` tries to raise its own scheduling priority and can't, because it
+runs as a normal (non-root) user.
+
+**Fix:** None needed — it's harmless. The server runs fine at normal priority. (If you make
+it a systemd service later, you can grant `CAP_SYS_NICE` to silence it, but there's no
+benefit for a solo realm.)
+
+**ARM64-specific:** no
+
+---
+
+### The Pi bogs down with 500 bots (`Update time diff` climbing)
+
+**Symptom:** With nobody playing, `Update time diff` mean sits at 40 ms+, and
+`Random Bots Stats` shows `500 online`.
+
+**Cause:** Playerbots' default ambient population is 500 random bots, each running AI on the
+world loop. That's far too many for a 4-core Pi.
+
+**Fix:** Lower `MinRandomBots`/`MaxRandomBots` in `playerbots.conf` (see Chapter 07, Step 3).
+~40 keeps the world alive at a fraction of the load; `0` makes it silent. These are ambient
+bots, separate from your personal party.
+
+**ARM64-specific:** yes (a Pi CPU constraint; a big x86 box would shrug off 500)
 
 ---
 

@@ -35,11 +35,11 @@ This one is different in two ways:
 | 00 | [Provisioning the Pi (bare metal to ready host)](docs/00-provisioning.md) | ✅ done |
 | 01 | [The client and extracting game data (maps, vmaps, mmaps)](docs/01-client-and-data.md) | ✅ done |
 | 02 | [ARM64 build toolchain and dependencies](docs/02-build-toolchain.md) | ✅ done |
-| 03 | [MariaDB and the three databases](docs/03-database.md) | ✅ done |
+| 03 | [MySQL and the four databases](docs/03-database.md) | ✅ done |
 | 04 | [Cloning AzerothCore + the Playerbots fork](docs/04-cloning.md) | ✅ done |
 | 05 | [Building (the long one)](docs/05-building.md) | ✅ done |
 | 06 | [Configuration: worldserver, authserver, playerbots](docs/06-configuration.md) | ✅ done |
-| 07 | First boot: accounts, GM, realm | ☐ not started |
+| 07 | [First boot: accounts, GM, realm](docs/07-first-boot.md) | ✅ done |
 | 08 | The client side: connecting and the realmlist | ☐ not started |
 | 09 | Your bot party (tank, healer, two dps) | ☐ not started |
 | 10 | Keeping it alive: services, backups, updates | ☐ not started |

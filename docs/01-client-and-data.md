@@ -88,11 +88,20 @@ desktop $ sudo pacman -S --needed cmake boost mariadb-libs
   directory unconditionally, and that step checks for MySQL headers even when you are
   building only the tools. Without it you get `MYSQL_INCLUDE_DIR-NOTFOUND`.
 
-Clone the AzerothCore source (shallow is fine — we only need it to build the tools):
+Clone the source (shallow is fine — we only need it to build the tools). **Use the
+Playerbots fork, not upstream AzerothCore** — this matters:
 
 ```
-desktop $ git clone --depth 1 https://github.com/azerothcore/azerothcore-wotlk.git ~/azerothcore-tools
+desktop $ git clone --depth 1 --branch Playerbot https://github.com/mod-playerbots/azerothcore-wotlk.git ~/azerothcore-tools
 ```
+
+> **Why the fork, and not upstream?** The navigation-mesh (`mmaps`) files carry a format
+> version, and it differs between upstream (v20) and the Playerbots fork (v19). If you
+> build the extractors from upstream, the data extracts fine and *looks* correct — then at
+> first boot the server rejects every mmap tile (`built with generator v20, expected v19`)
+> and creatures/bots can't move. Building the tools from the **same fork you'll run as the
+> server** keeps the versions matched. (This is the fork we clone again on the Pi in
+> Chapter 04; here we only need it on the desktop to build the extractors.)
 
 Configure a **tools-only** build. Two flags matter and are not obvious:
 

@@ -44,11 +44,11 @@ for a password instead of the key, see the `Permission denied (publickey)` entry
 | 00 | [Provisioning the Pi](00-provisioning.md) | ✅ done |
 | 01 | [The client and extracting game data](01-client-and-data.md) | ✅ done |
 | 02 | [ARM64 build toolchain and dependencies](02-build-toolchain.md) | ✅ done |
-| 03 | [MariaDB and the three databases](03-database.md) | ✅ done |
+| 03 | [MySQL and the four databases](03-database.md) | ✅ done |
 | 04 | [Cloning AzerothCore + the Playerbots fork](04-cloning.md) | ✅ done |
 | 05 | [Building](05-building.md) | ✅ done |
 | 06 | [Configuration](06-configuration.md) | ✅ done |
-| 07 | First boot | ☐ |
+| 07 | [First boot](07-first-boot.md) | ✅ done |
 | 08 | The client side | ☐ |
 | 09 | Your bot party | ☐ |
 | 10 | Keeping it alive | ☐ |

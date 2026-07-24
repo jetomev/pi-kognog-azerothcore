@@ -1,8 +1,9 @@
-# Chapter 03 — MariaDB and the three databases
+# Chapter 03 — MySQL and the four databases
 
-The server needs somewhere to keep everything: accounts, characters, and the game world
-itself. That is three databases inside one MariaDB server. Here we install MariaDB,
-create those databases and the user the server logs in as, and confirm it all works.
+The server needs somewhere to keep everything: accounts, characters, the game world,
+and — because we're running Playerbots — the bots' own data. That's four databases inside
+one MySQL server. Here we install MySQL, create those databases and the user the server
+logs in as, and confirm it works.
 
 > **Connect to the Pi first.** From your desktop:
 > ```
@@ -12,116 +13,119 @@ create those databases and the user the server logs in as, and confirm it all wo
 
 ## What this is
 
-AzerothCore uses three databases:
+AzerothCore uses three databases, and the **Playerbots module adds a fourth**:
 
 | Database | Holds |
 |---|---|
 | `acore_auth` | accounts and the realm list |
-| `acore_characters` | your characters — and your bots |
+| `acore_characters` | your characters |
 | `acore_world` | the game world: creatures, quests, items, spawns |
+| `acore_playerbots` | Playerbots' own data (bot state, guild names, etc.) |
 
-We use **MariaDB** (from Ubuntu's own repositories) as the database server. This is the
-one deliberate divergence from AzerothCore's Ubuntu 24.04 wiki, which points at an
-external MySQL 8.4 repo — MariaDB is simpler, ARM64-native, needs no third-party repo,
-and AzerothCore fully supports it.
+## Why MySQL 8.0 (and not MariaDB)
 
-## Why it matters
+**AzerothCore requires MySQL 8.0 or newer, and dropped MariaDB support in September 2024.**
+This is not optional — the worldserver checks the database version at startup and refuses
+to run against MariaDB (which it reads as a "5.5.5" version and rejects). We use **MySQL
+8.0 from Ubuntu's own repositories** — no external repo needed, and it matches the MySQL
+8.0 client library the server was built against in Chapter 02.
 
-Nothing about the server runs without these. The world database in particular is huge
-and detailed; getting the databases and login user right now means the server can, on
-first boot, import its schema and start filling them.
+> If you followed an older guide (or an earlier version of this one) that used MariaDB,
+> that's the trap: it installs and creates databases fine, then the server won't boot.
+> See the Troubleshooting entry "does not support MySQL versions below 8.0."
+
+## Why the fourth database
+
+Standard AzerothCore has three databases. **Playerbots needs `acore_playerbots` too.** If
+you create only three, the worldserver imports the world successfully and then **crashes
+(segfault)** when the Playerbots module tries to open a database that doesn't exist. We
+create all four up front.
 
 ## Before you start
 
-- Chapter 02 complete (build toolchain installed).
+- Chapter 02 complete (build toolchain, including the MySQL client library).
 - You are SSH'd into the Pi.
 
 ## Steps
 
-### 1. Install MariaDB
+### 1. Install MySQL 8.0
 
 ```
-tpgaming01 $ sudo apt install -y mariadb-server
-tpgaming01 $ sudo systemctl enable --now mariadb
-tpgaming01 $ systemctl status mariadb --no-pager | head -4
-tpgaming01 $ mariadb --version
+tpgaming01 $ sudo apt install -y mysql-server
+tpgaming01 $ sudo systemctl enable --now mysql
+tpgaming01 $ sudo systemctl status mysql --no-pager | head -3
+tpgaming01 $ mysql --version
 ```
 
-`enable --now` both starts it and sets it to start on every boot. You should see
-`active (running)` and a version like `10.11.x`.
+You should see `active (running)` and a version like `8.0.x`.
 
-> **Where the data lives:** this keeps MariaDB in its default location,
-> `/var/lib/mysql`, which is on the microSD. For a solo server (one player, a few bots)
-> the write volume is light, so this is fine. Moving the data directory to the NVMe for
-> heavier use or long-term SD longevity is covered as an optimization in Chapter 10.
+> **Where the data lives:** this keeps MySQL in its default location, `/var/lib/mysql`,
+> on the microSD. For a solo server the write volume is light. Moving the data directory
+> to the NVMe is covered as an optimization in Chapter 10.
 
-### 2. Create the databases and the server user
+### 2. Create the four databases and the server user
 
-Ubuntu's MariaDB is already reasonably locked down out of the box — `root` authenticates
-via the unix socket (only reachable through `sudo`, no password), there are no anonymous
-users or `test` database, and it binds to localhost. So there is no
-`mysql_secure_installation` ritual to perform; we go straight to creating what
-AzerothCore needs.
-
-Paste this whole block. It is AzerothCore's own create script — user `acore`, password
-`acore`, the three databases in UTF8MB4:
+Ubuntu's MySQL authenticates `root` via the unix socket (reachable only through `sudo`,
+no password), so there's no `mysql_secure_installation` ritual needed. Paste this whole
+block — it is AzerothCore's create script **plus** the Playerbots database:
 
 ```
-tpgaming01 $ sudo mariadb <<'SQL'
+tpgaming01 $ sudo mysql <<'SQL'
 DROP USER IF EXISTS 'acore'@'localhost';
 CREATE USER 'acore'@'localhost' IDENTIFIED BY 'acore' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;
-CREATE DATABASE IF NOT EXISTS `acore_world` DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `acore_world`      DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
 CREATE DATABASE IF NOT EXISTS `acore_characters` DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE IF NOT EXISTS `acore_auth` DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
-GRANT ALL PRIVILEGES ON `acore_world` . * TO 'acore'@'localhost' WITH GRANT OPTION;
+CREATE DATABASE IF NOT EXISTS `acore_auth`       DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `acore_playerbots` DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON `acore_world`      . * TO 'acore'@'localhost' WITH GRANT OPTION;
 GRANT ALL PRIVILEGES ON `acore_characters` . * TO 'acore'@'localhost' WITH GRANT OPTION;
-GRANT ALL PRIVILEGES ON `acore_auth` . * TO 'acore'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON `acore_auth`       . * TO 'acore'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON `acore_playerbots` . * TO 'acore'@'localhost' WITH GRANT OPTION;
 SQL
 ```
 
-> **About the `acore`/`acore` password.** It is weak, and here that is an accepted
-> trade-off: MariaDB listens only on localhost, the firewall blocks the port anyway, and
-> this is a solo server. Using AzerothCore's default also means **zero** credential edits
-> in Chapter 06. If you want a strong password, change it in the `CREATE USER` line above
-> and remember to set the same one in the three server config files in Chapter 06.
+> **About the `acore`/`acore` password.** Weak, and acceptable here: MySQL listens only on
+> localhost, the firewall blocks the port, and this is a solo server. Using AzerothCore's
+> default also means zero credential edits in Chapter 06. For a strong password, change it
+> in the `CREATE USER` line and in the four `DatabaseInfo` lines in Chapter 06 (and the
+> Playerbots database line in `playerbots.conf`).
 
 ### 3. Verify
 
 ```
-tpgaming01 $ sudo mariadb -e "SHOW DATABASES;"
-tpgaming01 $ mariadb -u acore -pacore -e "SHOW DATABASES;"
+tpgaming01 $ sudo mysql -e "SHOW DATABASES;"
+tpgaming01 $ mysql -u acore -pacore -e "SHOW DATABASES;"
 tpgaming01 $ sudo ss -tlnp | grep 3306
 ```
 
-- The first lists all databases including the three `acore_*`.
-- The second logs in **as the `acore` user** (proving the user and its grants work) and
-  should show exactly `acore_auth`, `acore_characters`, `acore_world`, and
-  `information_schema` — not the system databases, because `acore` is scoped to its own.
-- `ss` should show `127.0.0.1:3306` — bound to localhost, not `0.0.0.0`.
+- The first lists all four `acore_*` databases.
+- The second logs in **as `acore`** (proving user and grants) and shows its four databases.
+- `ss` shows `127.0.0.1:3306` — localhost only (MySQL also opens `33060` for its X
+  protocol, also localhost; both are firewalled regardless).
 
-> **A note if you watched a MySQL tutorial:** many AzerothCore videos tell you to
-> **disable the binary log** (`log_bin`), warning it grows without bound and fills your
-> disk. That is true for **MySQL 8**, where binary logging is **on by default**. It is
-> **not** true here — **MariaDB leaves `log_bin` off by default**, so there is nothing to
-> disable. Confirm with `sudo mariadb -e "SHOW VARIABLES LIKE 'log_bin';"` (expect
-> `OFF`). One more quiet benefit of choosing MariaDB.
+### 4. (Optional) Disable the binary log
+
+Unlike MariaDB, **MySQL 8.0 enables the binary log by default**, and it grows over time —
+on a small disk that adds up. AzerothCore does not need it. To turn it off:
+
+```
+tpgaming01 $ echo -e "[mysqld]\nskip-log-bin" | sudo tee /etc/mysql/mysql.conf.d/zz-acore.cnf
+tpgaming01 $ sudo systemctl restart mysql
+```
+
+(Skip this if you want point-in-time recovery and don't mind the disk usage.)
 
 ## ✅ Checkpoint
 
-Chapter 03 is done when:
-
-- `mariadb --version` shows a running 10.11.x server,
-- the `acore` user can log in with `mariadb -u acore -pacore` and sees its three
-  databases, and
-- the databases are **empty**. That is correct — they are populated automatically on
-  first boot in Chapter 07.
+Chapter 03 is done when `mysql --version` shows 8.0.x, the `acore` user logs in with
+`mysql -u acore -pacore` and sees its **four** databases, and they are all **empty** —
+that's correct; the servers populate them on first boot in Chapter 07.
 
 ## ⚠ If it went wrong
 
-- **`Access denied for user 'acore'@'localhost'`** on the verify step — the `CREATE USER`
-  or `GRANT` lines did not all run. Re-paste the Step 2 block; it is safe to run again
-  (it drops and recreates the user, and the databases use `IF NOT EXISTS`).
-- **`ss` shows `0.0.0.0:3306`** — MariaDB is listening on all interfaces. On Ubuntu's
-  default config it should be localhost; if not, set `bind-address = 127.0.0.1` in
-  `/etc/mysql/mariadb.conf.d/50-server.cnf` and restart MariaDB. (Even if it did, the
-  firewall from Chapter 00 blocks the port from outside.)
+- **You installed MariaDB** (an earlier plan) — the server won't boot later
+  (`does not support MySQL versions below 8.0`). Remove MariaDB and install MySQL as
+  above. See Troubleshooting for the clean removal (do **not** blanket-`rm -rf /etc/mysql`
+  while `mysql-common` is installed — it breaks the MySQL install).
+- **`Access denied for user 'acore'@'localhost' to database 'acore_playerbots'`** at first
+  boot — you created only three databases. Add the fourth (Step 2 is safe to re-run).

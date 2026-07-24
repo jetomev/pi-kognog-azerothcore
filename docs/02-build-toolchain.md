@@ -53,14 +53,16 @@ Notes:
   needs, ~1.5 GB of packages including some MPI/LLVM extras). It is the simplest choice
   and what the wiki recommends; trimming it is an optimization for later, not now.
 - **`default-libmysqlclient-dev`** installs the client library the server build links
-  against. On Ubuntu 24.04 this resolves to **MySQL 8.0's** client (`libmysqlclient21`),
-  which builds AzerothCore fine regardless of which database *server* you run.
+  against. On Ubuntu 24.04 this resolves to **MySQL 8.0's** client (`libmysqlclient21`).
+  That is exactly right for us, because we run a **MySQL 8.0 server** (Chapter 03) — they
+  must match. (AzerothCore requires MySQL 8.0+; it dropped MariaDB support in 2024.)
 
-> **Deliberate divergence from the wiki:** AzerothCore's 24.04 instructions add Oracle's
-> external APT repo and install **MySQL 8.4**. For this easy-install base guide we do
-> **not** do that here. We install only the client headers now, and in Chapter 03 we use
-> **MariaDB** from Ubuntu's own repositories — no third-party repo, no GPG keys, ARM64
-> native, and fully supported by AzerothCore. One less thing to break.
+> **A note on the database:** AzerothCore's 24.04 wiki adds Oracle's external APT repo for
+> **MySQL 8.4**. For this easy-install guide we instead use **MySQL 8.0 from Ubuntu's own
+> repositories** in Chapter 03 — no third-party repo, and it matches the 8.0 client library
+> installed here. Do **not** use MariaDB: AzerothCore dropped MariaDB support in 2024 and
+> the server refuses to start against it. (An earlier version of this guide used MariaDB
+> and hit exactly that wall — hence this note.)
 
 ### 2. Verify the versions
 

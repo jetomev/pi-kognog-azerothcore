@@ -169,20 +169,29 @@ After the restart the log shows `Process priority class set to -15` instead of t
 
 ### 6. The backup script
 
-Dumps all four databases, gzipped and timestamped, pruning copies older than 14 days. It
-runs as root and authenticates through MySQL's **local socket** (`auth_socket`) — so no
-password is ever stored.
+Dumps all four databases to the **NVMe** (7-day retention), then places a second copy of
+the three **irreplaceable** databases on the **microSD** (3-day retention) — so a single
+dead disk can never take the data *and* its backups together. It runs as root and
+authenticates through MySQL's **local socket** (`auth_socket`) — so no password is ever
+stored.
 
 ```
 sudo tee /usr/local/bin/acore-backup.sh > /dev/null <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Primary backups (NVMe) - all four databases
 BACKUP_DIR="/mnt/nvme/backups/mysql"
-RETENTION_DAYS=14
+RETENTION_DAYS=7
 DBS=(acore_auth acore_characters acore_world acore_playerbots)
 
-mkdir -p "$BACKUP_DIR"
+# Second copy (microSD, root filesystem) - only the irreplaceable databases.
+# acore_world is static, regenerable game data, so it stays off the card.
+SD_BACKUP_DIR="/var/backups/acore-mysql"
+SD_RETENTION_DAYS=3
+DYNAMIC_DBS=(acore_auth acore_characters acore_playerbots)
+
+mkdir -p "$BACKUP_DIR" "$SD_BACKUP_DIR"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 
 for db in "${DBS[@]}"; do
@@ -190,7 +199,12 @@ for db in "${DBS[@]}"; do
         | gzip > "$BACKUP_DIR/${db}-${STAMP}.sql.gz"
 done
 
+for db in "${DYNAMIC_DBS[@]}"; do
+    cp "$BACKUP_DIR/${db}-${STAMP}.sql.gz" "$SD_BACKUP_DIR/"
+done
+
 find "$BACKUP_DIR" -name '*.sql.gz' -type f -mtime +"$RETENTION_DAYS" -delete
+find "$SD_BACKUP_DIR" -name '*.sql.gz' -type f -mtime +"$SD_RETENTION_DAYS" -delete
 EOF
 sudo chmod +x /usr/local/bin/acore-backup.sh
 ```
@@ -198,17 +212,25 @@ sudo chmod +x /usr/local/bin/acore-backup.sh
 - **`--single-transaction`** takes a consistent snapshot *without locking* — safe to run
   while people play.
 - **`--quick`** streams rows, easy on the Pi's RAM.
+- **Why only three DBs on the microSD:** `acore_world` is 76 MB of every 95 MB set, and
+  it's static, regenerable game data. Leaving it off the card cuts the nightly microSD
+  write to ~20 MB (kind to the card's endurance) while keeping every byte you can't
+  recreate: accounts, characters, bot state.
+- **Why 7 days, not 3:** retention should outlive your *time to notice* a problem. If
+  corruption sneaks in on a Tuesday and you only play weekends, a 3-day window has already
+  recycled every clean copy.
 
 Prove it by hand:
 
 ```
 sudo /usr/local/bin/acore-backup.sh
-ls -lh /mnt/nvme/backups/mysql/          # four .sql.gz files; acore_world is the big one
+ls -lh /mnt/nvme/backups/mysql/       # four .sql.gz files; acore_world is the big one
+ls -lh /var/backups/acore-mysql/      # exactly three files, ~20 MB total
 ```
 
-> `acore_world` is static game data and *is* regenerable from the AzerothCore install, so if
-> space is ever tight you can drop it from `DBS`. The dynamic data you can't recreate is in
-> `acore_characters`, `acore_auth`, and `acore_playerbots`.
+> Want copies **off the Pi entirely** (a USB stick, or pulled to your desktop)? That's the
+> optional chapter: **[Off-box backups](optional-offbox-backups.md)** — do it before any
+> wipe or reinstall.
 
 ### 7. Run it nightly
 

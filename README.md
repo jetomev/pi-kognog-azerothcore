@@ -44,7 +44,7 @@ This one is different in two ways:
 | 09 | [Your bot party (tank, healer, two dps)](docs/09-bot-party.md) | ✅ done |
 | 10 | [Keeping it alive: services, backups, updates](docs/10-keeping-it-alive.md) | ✅ done |
 
-**Optional:** **[Adding modules](docs/optional-modules.md)** — an auction-house bot (`mod-ah-bot`), quality-of-life modules, difficulty scaling, and the reusable pattern for adding any module. Tackled *after* the base realm works.
+**Optional:** **[Adding modules](docs/optional-modules.md)** — an auction-house bot (`mod-ah-bot`), quality-of-life modules, difficulty scaling, and the reusable pattern for adding any module. Tackled *after* the base realm works. · **[Off-box backups](docs/optional-offbox-backups.md)** — database copies that live off the Pi (pulled to a desktop, or on a USB drive); make one before any wipe.
 
 Alongside them: **[Troubleshooting](docs/TROUBLESHOOTING.md)** (every error we actually hit, with the fix), **[Sources](docs/SOURCES.md)** and **[Thanks](docs/THANKS.md)** (credit where it's due), and **[Q&A](docs/QA.md)**.
 

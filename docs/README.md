@@ -53,7 +53,7 @@ for a password instead of the key, see the `Permission denied (publickey)` entry
 | 09 | [Your bot party](09-bot-party.md) | ✅ done |
 | 10 | [Keeping it alive](10-keeping-it-alive.md) | ✅ done |
 
-**Optional:** [Adding modules](optional-modules.md) — an auction-house bot, quality-of-life tweaks, difficulty scaling, and the reusable "how to add any module" pattern. Done *after* the base realm works.
+**Optional:** [Adding modules](optional-modules.md) — an auction-house bot, quality-of-life tweaks, difficulty scaling, and the reusable "how to add any module" pattern. Done *after* the base realm works. · [Off-box backups](optional-offbox-backups.md) — copies of the databases that live off the Pi (pulled to a desktop, or on a USB drive); do one before any wipe.
 
 **Reference:** [Troubleshooting](TROUBLESHOOTING.md) · [Sources](SOURCES.md) · [Thanks](THANKS.md)
 

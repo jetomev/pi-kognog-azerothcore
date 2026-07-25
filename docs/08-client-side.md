@@ -196,7 +196,55 @@ Watch the Pi's `authserver` terminal as you press Enter. A **wrong** password lo
 A **correct** one logs *nothing* — success is silent; you're handed to `worldserver` and
 the realm list appears. Enter the realm, create a character, and step into the world.
 
-### 8. (Optional) Lutris and Steam/Proton
+### 8. One command to launch it all
+
+Once it works, you don't want to retype the prefix, the debug flag, and the `cd` every
+time. Wrap it in a small launcher so the whole thing is a single command. The guide ships
+a template at [`scripts/play-wotlk.sh`](../scripts/play-wotlk.sh):
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ---- Edit these to match your setup ----
+GAME_DIR="$HOME/Games/ChromieCraft_3.3.5a"   # folder that contains Wow.exe
+WINEPREFIX_DIR="$HOME/.wow335"               # the dedicated Wine prefix
+WOW_EXE="Wow.exe"
+# ----------------------------------------
+
+export WINEPREFIX="$WINEPREFIX_DIR"
+export WINEDEBUG=-all      # silence Wine's cosmetic fixme/err spam
+
+cd "$GAME_DIR"
+if command -v gamemoderun >/dev/null 2>&1; then
+    exec gamemoderun wine "$WOW_EXE"
+else
+    exec wine "$WOW_EXE"
+fi
+```
+
+What it bakes in, so a reader never has to remember it:
+- the **dedicated prefix** (`WINEPREFIX=~/.wow335`),
+- **`WINEDEBUG=-all`**, which silences Wine's harmless-but-noisy console spam (the endless
+  `err:msg:process_hardware_message unknown message type 3` lines and the `winediag`
+  fixme's — cosmetic, see Troubleshooting),
+- **`gamemoderun`** automatically, *if* it's installed (skipped cleanly if not),
+- launching from the **client folder**.
+
+Install it and run:
+
+```
+desktop $ cp scripts/play-wotlk.sh ~/play-wotlk.sh   # or anywhere you like
+desktop $ chmod +x ~/play-wotlk.sh
+desktop $ ~/play-wotlk.sh
+```
+
+That single command is now "play the game." For a **double-click** launcher from your app
+menu or file manager, adapt [`scripts/wotlk.desktop`](../scripts/wotlk.desktop) — set its
+`Exec=` line to the absolute path of your `play-wotlk.sh` and drop it in
+`~/.local/share/applications/`.
+
+### 9. (Optional) Lutris and Steam/Proton
 
 Bare Wine is the main path because it's the fewest moving parts and it works. The other two
 runners are documented in **[optional-modules.md](optional-modules.md)** for people who

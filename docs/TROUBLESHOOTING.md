@@ -522,6 +522,38 @@ the password in a manager this time.
 
 ---
 
+### Wine floods the terminal with `unknown message type 3` (and `winediag` fixme's)
+
+**Symptom:** Launching `Wow.exe` fills the terminal with thousands of lines like:
+
+```
+0130:err:msg:process_hardware_message unknown message type 3
+...
+01c4:fixme:winediag:loader_init wine-staging 11.13 is a testing version ...
+```
+
+The game itself runs fine.
+
+**Cause:** Both are **cosmetic**. The `winediag` line is just Wine Staging noting it's a
+testing build. The `process_hardware_message unknown message type 3` flood is Wine choking
+on an input event it doesn't recognise — commonly from a connected **controller / joystick
+/ tablet / extra HID device**. It doesn't crash anything; it just spams stderr and wastes a
+little CPU.
+
+**Fix:** Silence Wine's debug channels with `WINEDEBUG=-all` (this is baked into the
+Chapter 08 launcher script):
+
+```
+WINEPREFIX=$HOME/.wow335 WINEDEBUG=-all wine Wow.exe
+```
+
+If a game controller is plugged in and unused, unplugging it often stops the `type 3` flood
+at the source — but `WINEDEBUG=-all` handles it regardless.
+
+**ARM64-specific:** no (a Wine/desktop issue)
+
+---
+
 ## Chapter 09 — Your bot party
 
 ### Bot command prints a USAGE list and nothing is summoned
@@ -562,6 +594,30 @@ you walk off.
 
 **Fix:** Tell them to regroup: in party chat, **`/p follow`**. (They auto-follow and
 auto-assist by default; `/p stay` parks them, `/p attack` focus-fires your target.)
+
+**ARM64-specific:** no
+
+---
+
+### A "kill X creatures" quest stops counting
+
+**Symptom:** A kill-quest counter climbs for the first couple of kills, then stops
+advancing while you keep killing the same mobs.
+
+**Cause:** Usually one of two things — and they are **not** bugs:
+1. **The quest is already done.** Open the quest log (`L`); if the objective reads `X/X`,
+   it finished and simply stopped at the cap. Turn it in.
+2. **A bot is stealing the tag.** In WoW you only get kill credit for a mob your group
+   **tagged** (dealt first damage to) *and* that you were **near** when it died. `addclass`
+   bots are fast and aggressive; if a bot tags and kills a mob while you're out of range,
+   the bot gets the tag and you get no credit.
+
+**Fix:**
+- Check the quest log first — most "it stopped" reports are case 1 (already complete).
+- If it's case 2: **tag the mob yourself** (one hit/spell/shot before the bots pile on), or
+  `/p stay` to park the party, pull the mob, then `/p attack` so *you* stay the tagger.
+- Also confirm the mobs are the **exact** creature the quest names (some zones have two
+  near-identical variants; only one counts).
 
 **ARM64-specific:** no
 

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=WoW 3.3.5a — AzerothCore (Playerbots)
+Comment=Connect to your Raspberry Pi WotLK realm
+# Exec must be an ABSOLUTE path to your copy of play-wotlk.sh (edit this line).
+Exec=/home/jetomev/play-wotlk.sh
+Terminal=false
+Categories=Game;

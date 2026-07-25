@@ -127,3 +127,6 @@ moving the database onto the NVMe.
   console, `account set gmlevel BALIH 3 -1` (Chapter 07).
 - **Party won't grow past a point** — a group caps at 5 (you + 4). For more, you're into
   raid territory and higher bot counts, which a Pi will feel.
+- **A kill-quest stops counting** — usually the quest is already complete (`L` shows `X/X`),
+  or a bot is tagging mobs you're out of range for. Tag them yourself, or `/p stay` then
+  pull. See Troubleshooting (Chapter 09).

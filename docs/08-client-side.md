@@ -231,18 +231,22 @@ What it bakes in, so a reader never has to remember it:
 - **`gamemoderun`** automatically, *if* it's installed (skipped cleanly if not),
 - launching from the **client folder**.
 
-Install it and run:
+The tidiest place for it is **inside the client folder, next to `Wow.exe`**, so everything
+lives in one directory:
 
 ```
-desktop $ cp scripts/play-wotlk.sh ~/play-wotlk.sh   # or anywhere you like
-desktop $ chmod +x ~/play-wotlk.sh
-desktop $ ~/play-wotlk.sh
+desktop $ cp scripts/play-wotlk.sh ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
+desktop $ chmod +x ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
+desktop $ ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
 ```
 
-That single command is now "play the game." For a **double-click** launcher from your app
-menu or file manager, adapt [`scripts/wotlk.desktop`](../scripts/wotlk.desktop) — set its
-`Exec=` line to the absolute path of your `play-wotlk.sh` and drop it in
-`~/.local/share/applications/`.
+That single command is now "play the game" (the script's `GAME_DIR` default already points
+at this folder, so it runs from anywhere). For a **double-click** launcher, adapt
+[`scripts/wotlk.desktop`](../scripts/wotlk.desktop) — set its `Exec=` line to the absolute
+path of your `play-wotlk.sh` (e.g. the one you just copied into the client folder). Keep it
+beside the script, or copy it to `~/.local/share/applications/` to get it in your app menu.
+Some file managers ask you to mark a `.desktop` file "trusted" / "Allow launching" the
+first time.
 
 ### 9. (Optional) Lutris and Steam/Proton
 

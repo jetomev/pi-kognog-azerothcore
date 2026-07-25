@@ -1,0 +1,8 @@
+[Unit]
+Description=AzerothCore MySQL backup (all four databases)
+After=mysql.service
+Requires=mysql.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/acore-backup.sh

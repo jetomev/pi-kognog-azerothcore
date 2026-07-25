@@ -12,7 +12,8 @@ Search this file by the error message. That is how you will arrive here.
 [05 — Building](#chapter-05--building) ·
 [07 — First boot](#chapter-07--first-boot) ·
 [08 — Client side](#chapter-08--the-client-side) ·
-[09 — Bot party](#chapter-09--your-bot-party)
+[09 — Bot party](#chapter-09--your-bot-party) ·
+[10 — Keeping it alive](#chapter-10--keeping-it-alive)
 
 ## How entries are written
 
@@ -618,6 +619,71 @@ advancing while you keep killing the same mobs.
   `/p stay` to park the party, pull the mob, then `/p attack` so *you* stay the tagger.
 - Also confirm the mobs are the **exact** creature the quest names (some zones have two
   near-identical variants; only one counts).
+
+**ARM64-specific:** no
+
+---
+
+## Chapter 10 — Keeping it alive
+
+### The journal fills with endless `AC>` lines under systemd
+
+**Symptom:** After making `worldserver` a systemd service, `journalctl -u
+azerothcore-worldserver` is flooded with:
+
+```
+worldserver[14053]: AC>
+worldserver[14053]: AC>
+worldserver[14053]: AC>   ...forever
+```
+
+**Cause:** `worldserver`'s interactive console reads commands from stdin. Under systemd
+there's no keyboard attached (stdin is empty), so every read returns end-of-input, it
+reprints the `AC>` prompt, and loops — churning the disk and burying the real log.
+
+**Fix:** Disable the console in `worldserver.conf`; you administer the realm in-game as GM
+instead:
+
+```
+sed -i -E 's/^Console\.Enable\s*=.*/Console.Enable = 0/' /mnt/nvme/azerothcore-wotlk/env/dist/etc/worldserver.conf
+sudo systemctl restart azerothcore-worldserver
+```
+
+To get the real `AC>` console back for a session, `sudo systemctl stop
+azerothcore-worldserver` and run `./worldserver` by hand in a terminal.
+
+**ARM64-specific:** no
+
+---
+
+### MySQL won't start after moving the datadir to the NVMe
+
+**Symptom:** After setting `datadir = /mnt/nvme/mysql`, `mysql.service` fails to start.
+`dmesg` shows an AppArmor denial:
+
+```
+apparmor="DENIED" operation="open" ... name="/mnt/nvme/mysql/..." comm="mysqld"
+```
+
+**Cause:** Ubuntu's AppArmor profile (`/etc/apparmor.d/usr.sbin.mysqld`) confines `mysqld`
+to `/var/lib/mysql`. A new datadir is denied *even with correct filesystem permissions*
+until AppArmor is told about it. This is the one trap of a MySQL datadir move on Ubuntu.
+
+**Fix:** Add the new path to the profile's local override (which the vendor profile already
+includes) and reload it — mirroring the existing `/var/lib/mysql` rules:
+
+```
+sudo tee -a /etc/apparmor.d/local/usr.sbin.mysqld > /dev/null <<'EOF'
+/mnt/nvme/mysql/ r,
+/mnt/nvme/mysql/** rwk,
+EOF
+sudo apparmor_parser -r /etc/apparmor.d/usr.sbin.mysqld
+sudo systemctl start mysql
+```
+
+Rollback if needed is trivial: point the datadir back at `/var/lib/mysql` (remove
+`zz-datadir.cnf`) and restart — the original copy is kept as `/var/lib/mysql.bak` until
+you've confirmed the move.
 
 **ARM64-specific:** no
 

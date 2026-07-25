@@ -1,0 +1,17 @@
+[Unit]
+Description=AzerothCore authserver (Playerbots)
+After=network-online.target mysql.service
+Wants=network-online.target
+Requires=mysql.service
+
+[Service]
+Type=simple
+User=tphome
+Group=tphome
+WorkingDirectory=/mnt/nvme/azerothcore-wotlk/env/dist/bin
+ExecStart=/mnt/nvme/azerothcore-wotlk/env/dist/bin/authserver
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

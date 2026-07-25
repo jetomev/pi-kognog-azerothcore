@@ -51,7 +51,7 @@ for a password instead of the key, see the `Permission denied (publickey)` entry
 | 07 | [First boot](07-first-boot.md) | ✅ done |
 | 08 | [The client side](08-client-side.md) | ✅ done |
 | 09 | [Your bot party](09-bot-party.md) | ✅ done |
-| 10 | Keeping it alive | ☐ |
+| 10 | [Keeping it alive](10-keeping-it-alive.md) | ✅ done |
 
 **Optional:** [Adding modules](optional-modules.md) — an auction-house bot, quality-of-life tweaks, difficulty scaling, and the reusable "how to add any module" pattern. Done *after* the base realm works.
 

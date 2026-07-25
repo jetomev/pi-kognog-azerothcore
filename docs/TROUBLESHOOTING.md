@@ -10,7 +10,9 @@ Search this file by the error message. That is how you will arrive here.
 [03 — Database](#chapter-03--mysql-and-the-databases) ·
 [04 — Cloning](#chapter-04--cloning-azerothcore--the-playerbots-fork) ·
 [05 — Building](#chapter-05--building) ·
-[07 — First boot](#chapter-07--first-boot)
+[07 — First boot](#chapter-07--first-boot) ·
+[08 — Client side](#chapter-08--the-client-side) ·
+[09 — Bot party](#chapter-09--your-bot-party)
 
 ## How entries are written
 
@@ -463,6 +465,105 @@ world loop. That's far too many for a 4-core Pi.
 bots, separate from your personal party.
 
 **ARM64-specific:** yes (a Pi CPU constraint; a big x86 box would shrug off 500)
+
+---
+
+## Chapter 08 — The client side
+
+### The game window is trapped in the top-left corner of the screen
+
+**Symptom:** Under Wine, `Wow.exe` launches but the logo/cinematic and login render into
+only the **top-left quarter** of the monitor; you can't reach the login box.
+
+**Cause:** The game came up **fullscreen at a small default resolution**, and Wine renders
+it 1:1 into the corner instead of scaling it to your (larger, e.g. 2560×1440) display.
+
+**Fix:** Give it a client config that forces windowed mode at a sane size. WoW only writes
+`WTF/Config.wtf` on a clean exit, so if it never got that far, create the file yourself:
+
+```
+SET gxApi "d3d9"
+SET gxWindow "1"
+SET gxMaximize "0"
+SET gxResolution "1920x1080"
+SET windowResolution "1920x1080"
+SET realmList "192.168.1.220"
+```
+
+`gxWindow "1"` is the key line (windowed, movable). Relaunch. After a clean run and proper
+exit, the game rewrites `Config.wtf` with your monitor's real resolution/refresh — that's
+expected; leave it.
+
+**ARM64-specific:** no (a Wine/desktop issue, unrelated to the server)
+
+---
+
+### You've forgotten the account password
+
+**Symptom:** Login fails and `authserver` logs `account BALIH tried to login with invalid
+password!` — because you no longer remember it.
+
+**Cause:** Recent AzerothCore (and this fork) store passwords as **SRP6 salt+verifier**,
+not a plain hash, so you can't just edit the database. You reset it from the server console.
+
+**Fix:** At a **live** `worldserver` console (the `AC>` prompt — a foreground terminal, not
+an orphaned background process), set a new one:
+
+```
+account set password BALIH <newpassword> <newpassword>
+```
+
+Same value twice; it confirms "The password was changed for account BALIH." If your only
+`worldserver` is orphaned (running but its `screen` shows `Dead`, so no console), stop it
+with `kill <pid>` and restart it in a foreground terminal to get the prompt back. Then save
+the password in a manager this time.
+
+**ARM64-specific:** no
+
+---
+
+## Chapter 09 — Your bot party
+
+### Bot command prints a USAGE list and nothing is summoned
+
+**Symptom:** `.playerbot addclass warrior` (or similar) does nothing but print:
+
+```
+### USAGE: .playerbots...
+- playerbots account...
+- playerbots bot
+- ...
+```
+
+**Cause:** Wrong prefix. This fork uses **`.playerbots`** (with an **s**), and party
+control is under the **`bot`** sub-word. `.playerbot` (singular) is the *old* fork's syntax
+and only prints usage here.
+
+**Fix:** Use the current form:
+
+```
+.playerbots bot addclass warrior      # class bot (dk for death knight)
+.playerbots bot add Name1,Name2        # your own alt characters as bots
+```
+
+The authoritative command list is the
+[mod-playerbots Playerbot Commands wiki](https://github.com/mod-playerbots/mod-playerbots/wiki/Playerbot-Commands).
+
+**ARM64-specific:** no
+
+---
+
+### Bots stand still after a fight and don't catch up
+
+**Symptom:** The party fights when you engage, then just **stays where combat ended** while
+you walk off.
+
+**Cause:** Not a bug — bots hold at the kill spot and wait for their leader's next order.
+
+**Fix:** Tell them to regroup: in party chat, **`/p follow`**. (They auto-follow and
+auto-assist by default; `/p stay` parks them, `/p attack` focus-fires your target.)
+
+**ARM64-specific:** no
 
 ---
 

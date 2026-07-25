@@ -26,7 +26,7 @@ This one is different in two ways:
 1. **It targets ARM64.** Running AzerothCore, and especially **Playerbots**, on a Raspberry Pi is barely documented. The problems you hit there often have no answer anywhere. This guide is where those answers get written down.
 2. **It is written live, then destroyed and rebuilt.** Nothing here is copied from a video. Each chapter is written as the step is actually performed on real hardware. Then the entire server is **wiped and built again from zero, following only this guide**, to find the steps that quietly depended on state we forgot we created. That loop repeats until a single clean run works start to finish, with no deviations.
 
-> **Current status: not finished.** The realm is not up yet. Chapters appear as they are completed and verified. If a chapter is not listed below, it has not been written, because it has not been done.
+> **Current status: the realm is up and playable.** You can log in from a Linux client and play with a bot party (through Chapter 09). What remains is **Chapter 10** (services, backups, keeping it alive) and the real finish line: **wiping the Pi and rebuilding from this guide alone**, with zero deviations. Chapters appear only as they are completed and verified — if one isn't listed below, it hasn't been done yet.
 
 ## <img src="assets/icons/the-guide.png" height="48" alt=""> The guide
 
@@ -40,13 +40,13 @@ This one is different in two ways:
 | 05 | [Building (the long one)](docs/05-building.md) | ✅ done |
 | 06 | [Configuration: worldserver, authserver, playerbots](docs/06-configuration.md) | ✅ done |
 | 07 | [First boot: accounts, GM, realm](docs/07-first-boot.md) | ✅ done |
-| 08 | The client side: connecting and the realmlist | ☐ not started |
-| 09 | Your bot party (tank, healer, two dps) | ☐ not started |
+| 08 | [The client side: connecting and the realmlist](docs/08-client-side.md) | ✅ done |
+| 09 | [Your bot party (tank, healer, two dps)](docs/09-bot-party.md) | ✅ done |
 | 10 | Keeping it alive: services, backups, updates | ☐ not started |
 
 **Optional:** **[Adding modules](docs/optional-modules.md)** — an auction-house bot (`mod-ah-bot`), quality-of-life modules, difficulty scaling, and the reusable pattern for adding any module. Tackled *after* the base realm works.
 
-Alongside them: **[Troubleshooting](docs/TROUBLESHOOTING.md)** (every error we actually hit, with the fix) and **[Q&A](docs/QA.md)**.
+Alongside them: **[Troubleshooting](docs/TROUBLESHOOTING.md)** (every error we actually hit, with the fix), **[Sources](docs/SOURCES.md)** and **[Thanks](docs/THANKS.md)** (credit where it's due), and **[Q&A](docs/QA.md)**.
 
 ## <img src="assets/icons/prerequisite-zero.png" height="48" alt=""> Prerequisite zero: the client
 

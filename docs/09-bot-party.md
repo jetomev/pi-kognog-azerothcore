@@ -90,6 +90,14 @@ where combat ended and wait for their leader, so tell them to catch up.
 The full, authoritative list lives at the
 [mod-playerbots Playerbot Commands wiki](https://github.com/mod-playerbots/mod-playerbots/wiki/Playerbot-Commands).
 
+> **Field discovery — recruiting from the world.** You can also build a party from the
+> random bots you *meet*: `/friend` a bot whose class you like, and later `/invite` it from
+> your friends list — it comes to you (or appears) **as itself, with its real level and
+> gear**, no summoning commands involved. Random bots accept invitations based on level by
+> default (`AiPlayerbot.GroupInvitationPermission = 1` — set it to `2` in `playerbots.conf`
+> to make them always accept). A very natural way to recruit companions you've actually
+> adventured past.
+
 ### 3. The long-term party — altbots (recommended for a real campaign)
 
 For a playthrough where the party is *yours* and progresses under your control, use your

@@ -3,7 +3,7 @@
    rune glow #A8E6FF · bone #E8F1F5 */
 
 [data-md-color-scheme="slate"] {
-  /* page */
+  /* content area */
   --md-default-bg-color: #05101B;
   --md-default-fg-color: #E8F1F5;
   --md-default-fg-color--light: #b9c9d2;
@@ -23,24 +23,75 @@
   --md-code-fg-color: #A8E6FF;
 
   /* tables / panels */
-  --md-typeset-table-color: rgba(127, 212, 245, 0.12);
+  --md-typeset-table-color: rgba(127, 212, 245, 0.14);
 
   /* footer */
   --md-footer-bg-color: #0B1A2A;
   --md-footer-bg-color--dark: #05101B;
 }
 
-/* sidebar: active item glows ice */
+/* ---- Areas: give each zone its own tone so the layout reads at a glance ----
+   header/footer: deep navy (theme vars above)
+   left menu + right page-index: raised navy panels with a frost edge
+   content: abyss */
+[data-md-color-scheme="slate"] .md-sidebar--primary .md-sidebar__scrollwrap,
+[data-md-color-scheme="slate"] .md-sidebar--secondary .md-sidebar__scrollwrap {
+  background: #0A1929;
+  border: 1px solid rgba(127, 212, 245, 0.12);
+  border-radius: 6px;
+  padding: 0.4rem 0;
+}
+
+/* sidebar text + hover */
+[data-md-color-scheme="slate"] .md-nav {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 12px;
+}
 [data-md-color-scheme="slate"] .md-nav__link--active,
 [data-md-color-scheme="slate"] .md-nav__link:focus,
 [data-md-color-scheme="slate"] .md-nav__link:hover {
   color: #7FD4F5;
 }
 
-/* headings a touch brighter than body text */
-[data-md-color-scheme="slate"] .md-typeset h1,
+/* ---- Type: Verdana 12, with bolder, larger titles ---- */
+[data-md-color-scheme="slate"] .md-typeset {
+  font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+  font-size: 12px;
+  line-height: 1.7;
+}
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: #E8F1F5;
+  font-size: 2.2em;
+  font-weight: 700;
+}
 [data-md-color-scheme="slate"] .md-typeset h2 {
   color: #E8F1F5;
+  font-size: 1.7em;
+  font-weight: 700;
+}
+[data-md-color-scheme="slate"] .md-typeset h3 {
+  font-size: 1.35em;
+  font-weight: 700;
+}
+[data-md-color-scheme="slate"] .md-typeset h4 {
+  font-weight: 700;
+}
+
+/* ---- Section pauses: a barely-visible line above every section title ---- */
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  border-top: 1px solid rgba(127, 212, 245, 0.14);
+  padding-top: 1em;
+  margin-top: 1.8em;
+}
+
+/* ---- Tables: frost-tinted header row ---- */
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background-color: #123049;
+  color: #A8E6FF;
+  font-weight: 700;
+}
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) tr:hover {
+  background-color: rgba(127, 212, 245, 0.05);
 }
 
 /* blockquotes as deep-navy panels with a frost edge */
@@ -53,7 +104,7 @@
 
 /* section icons used on the home page */
 .nk-icon {
-  height: 64px;
+  height: 32px;
   vertical-align: middle;
   margin-right: 0.35em;
 }

@@ -32,8 +32,8 @@ exactly why we also move it to the NVMe and back it up.
 - The install root is `/mnt/nvme/azerothcore-wotlk/env/dist`, MySQL 8.0 is running, and the
   four databases exist.
 
-Reusable copies of every file below live in [`systemd/`](../systemd) and
-[`scripts/`](../scripts).
+Reusable copies of every file below live in [`systemd/`](https://github.com/jetomev/pi-kognog-azerothcore/tree/main/systemd) and
+[`scripts/`](https://github.com/jetomev/pi-kognog-azerothcore/tree/main/scripts).
 
 ---
 

@@ -32,6 +32,8 @@ The `ARM64-specific` flag matters: it tells an x86 reader whether an entry is re
 
 ---
 
+<a id="chapter-00--provisioning-the-pi"></a>
+
 ## Chapter 00 — Provisioning the Pi
 
 ### NVMe not detected (`link down`), even with the HAT LEDs lit
@@ -140,6 +142,8 @@ context, or `-i` was pointed at the `.pub` (public) file instead of the private 
 **ARM64-specific:** no
 
 ---
+
+<a id="chapter-01--the-client-and-extracting-game-data"></a>
 
 ## Chapter 01 — The client and extracting game data
 
@@ -277,6 +281,8 @@ better fix is to build the Chapter 01 tools from the fork in the first place.
 
 ---
 
+<a id="chapter-03--mysql-and-the-databases"></a>
+
 ## Chapter 03 — MySQL and the databases
 
 ### `AzerothCore does not support MySQL versions below 8.0` (you're on MariaDB)
@@ -343,6 +349,8 @@ Avoid the blanket `rm -rf` in the first place — a targeted `apt purge` is enou
 
 ---
 
+<a id="chapter-04--cloning-azerothcore--the-playerbots-fork"></a>
+
 ## Chapter 04 — Cloning AzerothCore + the Playerbots fork
 
 ### Playerbots won't build / bots never appear — you cloned the wrong repository
@@ -373,6 +381,8 @@ renames branches over time.
 **ARM64-specific:** no
 
 ---
+
+<a id="chapter-05--building"></a>
 
 ## Chapter 05 — Building
 
@@ -406,6 +416,8 @@ hit this readily.
 big-RAM x86 box would not hit it)
 
 ---
+
+<a id="chapter-07--first-boot"></a>
 
 ## Chapter 07 — First boot
 
@@ -468,6 +480,8 @@ bots, separate from your personal party.
 **ARM64-specific:** yes (a Pi CPU constraint; a big x86 box would shrug off 500)
 
 ---
+
+<a id="chapter-08--the-client-side"></a>
 
 ## Chapter 08 — The client side
 
@@ -555,6 +569,8 @@ at the source — but `WINEDEBUG=-all` handles it regardless.
 
 ---
 
+<a id="chapter-09--your-bot-party"></a>
+
 ## Chapter 09 — Your bot party
 
 ### Bot command prints a USAGE list and nothing is summoned
@@ -623,6 +639,8 @@ advancing while you keep killing the same mobs.
 **ARM64-specific:** no
 
 ---
+
+<a id="chapter-10--keeping-it-alive"></a>
 
 ## Chapter 10 — Keeping it alive
 

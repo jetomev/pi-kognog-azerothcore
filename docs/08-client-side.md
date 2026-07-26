@@ -200,7 +200,7 @@ the realm list appears. Enter the realm, create a character, and step into the w
 
 Once it works, you don't want to retype the prefix, the debug flag, and the `cd` every
 time. Wrap it in a small launcher so the whole thing is a single command. The guide ships
-a template at [`scripts/play-wotlk.sh`](../scripts/play-wotlk.sh):
+a template at [`scripts/play-wotlk.sh`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/scripts/play-wotlk.sh):
 
 ```bash
 #!/usr/bin/env bash
@@ -242,7 +242,7 @@ desktop $ ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
 
 That single command is now "play the game" (the script's `GAME_DIR` default already points
 at this folder, so it runs from anywhere). For a **double-click** launcher, adapt
-[`scripts/wotlk.desktop`](../scripts/wotlk.desktop) — set its `Exec=` line to the absolute
+[`scripts/wotlk.desktop`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/scripts/wotlk.desktop) — set its `Exec=` line to the absolute
 path of your `play-wotlk.sh` (e.g. the one you just copied into the client folder). Keep it
 beside the script, or copy it to `~/.local/share/applications/` to get it in your app menu.
 Some file managers ask you to mark a `.desktop` file "trusted" / "Allow launching" the

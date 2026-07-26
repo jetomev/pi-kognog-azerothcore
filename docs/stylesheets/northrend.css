@@ -1,0 +1,65 @@
+/* Northrend, in a browser.
+   Abyss #05101B · deep navy #0B1A2A · frost blue #3FA9E0 · ice #7FD4F5
+   rune glow #A8E6FF · bone #E8F1F5 */
+
+[data-md-color-scheme="slate"] {
+  /* page */
+  --md-default-bg-color: #05101B;
+  --md-default-fg-color: #E8F1F5;
+  --md-default-fg-color--light: #b9c9d2;
+  --md-default-fg-color--lighter: #8fa5b1;
+  --md-default-fg-color--lightest: #223648;
+
+  /* header + accents */
+  --md-primary-fg-color: #0B1A2A;
+  --md-primary-bg-color: #E8F1F5;
+  --md-accent-fg-color: #7FD4F5;
+
+  /* links */
+  --md-typeset-a-color: #3FA9E0;
+
+  /* code */
+  --md-code-bg-color: #0B1A2A;
+  --md-code-fg-color: #A8E6FF;
+
+  /* tables / panels */
+  --md-typeset-table-color: rgba(127, 212, 245, 0.12);
+
+  /* footer */
+  --md-footer-bg-color: #0B1A2A;
+  --md-footer-bg-color--dark: #05101B;
+}
+
+/* sidebar: active item glows ice */
+[data-md-color-scheme="slate"] .md-nav__link--active,
+[data-md-color-scheme="slate"] .md-nav__link:focus,
+[data-md-color-scheme="slate"] .md-nav__link:hover {
+  color: #7FD4F5;
+}
+
+/* headings a touch brighter than body text */
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  color: #E8F1F5;
+}
+
+/* blockquotes as deep-navy panels with a frost edge */
+[data-md-color-scheme="slate"] .md-typeset blockquote {
+  background: #0B1A2A;
+  border-left: 4px solid #3FA9E0;
+  padding: 0.6em 1em;
+  border-radius: 0 4px 4px 0;
+}
+
+/* section icons used on the home page */
+.nk-icon {
+  height: 64px;
+  vertical-align: middle;
+  margin-right: 0.35em;
+}
+
+/* the banner should never overflow */
+.md-typeset img.nk-banner {
+  width: 100%;
+  border-radius: 6px;
+}

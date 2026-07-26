@@ -1,0 +1,62 @@
+site_name: pi-kognog-azerothcore
+site_description: >-
+  A verified, step-by-step guide to running WotLK 3.3.5a AzerothCore + Playerbots
+  on a Raspberry Pi 5 (ARM64), for solo play with a bot party.
+site_url: https://jetomev.github.io/pi-kognog-azerothcore/
+repo_url: https://github.com/jetomev/pi-kognog-azerothcore
+repo_name: jetomev/pi-kognog-azerothcore
+edit_uri: ""
+
+docs_dir: docs
+
+theme:
+  name: material
+  logo: assets/icons/brand.png
+  favicon: assets/icons/brand.png
+  palette:
+    scheme: slate
+  features:
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - stylesheets/northrend.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: false
+
+nav:
+  - Home: README.md
+  - The Guide:
+      - "00 · Provisioning the Pi": 00-provisioning.md
+      - "01 · The client and game data": 01-client-and-data.md
+      - "02 · ARM64 build toolchain": 02-build-toolchain.md
+      - "03 · MySQL and the four databases": 03-database.md
+      - "04 · Cloning the Playerbots fork": 04-cloning.md
+      - "05 · Building": 05-building.md
+      - "06 · Configuration": 06-configuration.md
+      - "07 · First boot": 07-first-boot.md
+      - "08 · The client side": 08-client-side.md
+      - "09 · Your bot party": 09-bot-party.md
+      - "10 · Keeping it alive": 10-keeping-it-alive.md
+  - Optional:
+      - "Adding modules": optional-modules.md
+      - "Off-box backups": optional-offbox-backups.md
+  - Reference:
+      - Troubleshooting: TROUBLESHOOTING.md
+      - "Q&A": QA.md
+      - Sources: SOURCES.md
+      - Thanks: THANKS.md

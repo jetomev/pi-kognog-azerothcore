@@ -35,4 +35,4 @@ For the human thank-you to the people and projects behind these, see
 ---
 
 *Spotted a better or more current source, or one we should flag? Open an issue — see
-[CONTRIBUTING.md](../CONTRIBUTING.md).*
+[CONTRIBUTING.md](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/CONTRIBUTING.md).*

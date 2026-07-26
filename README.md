@@ -2,7 +2,7 @@
 
 <img src="assets/banner.png" alt="pi-kognog-azerothcore — Wrath of the Lich King · 3.3.5a · Playerbots · a solo realm raised by hand on a Raspberry Pi 5" width="100%">
 
-![Status: in progress](https://img.shields.io/badge/Status-Building%20live-3FA9E0.svg)
+![Status: complete, validation pending](https://img.shields.io/badge/Status-Chapters%2000--10%20done-3FA9E0.svg)
 ![Platform: Raspberry Pi 5](https://img.shields.io/badge/Platform-Raspberry%20Pi%205%20(ARM64)-7FD4F5.svg)
 ![Core: AzerothCore](https://img.shields.io/badge/Core-AzerothCore%203.3.5a-0B1A2A.svg)
 ![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)
@@ -11,13 +11,13 @@
 
 ---
 
-## <img src="assets/icons/what-this-is.png" height="48" alt=""> What this is
+## <img src="assets/icons/what-this-is.png" height="64" alt=""> What this is
 
-A **step-by-step, verified guide** to running your own **World of Warcraft: Wrath of the Lich King (3.3.5a)** server with **AzerothCore + Playerbots**, on a **Raspberry Pi 5 (ARM64)**, for solo play with a bot party.
+A **step-by-step, verified guide** to running your own **World of Warcraft: Wrath of the Lich King (3.3.5a)** server with **AzerothCore + Playerbots**, on a **Raspberry Pi 5 (ARM64)**, for solo play with a bot party — on an all-Linux stack, client included.
 
 It is written for someone who has never done this before. Every chapter assumes nothing, explains what each piece *is* before telling you to install it, and ends with a **checkpoint** so you know whether it worked before moving on.
 
-## <img src="assets/icons/why-this-guide-exists.png" height="48" alt=""> Why this guide exists
+## <img src="assets/icons/why-this-guide-exists.png" height="64" alt=""> Why this guide exists
 
 There are many AzerothCore tutorials. Almost all of them are **x86_64**, and most are transcribed from someone else's video.
 
@@ -26,77 +26,30 @@ This one is different in two ways:
 1. **It targets ARM64.** Running AzerothCore, and especially **Playerbots**, on a Raspberry Pi is barely documented. The problems you hit there often have no answer anywhere. This guide is where those answers get written down.
 2. **It is written live, then destroyed and rebuilt.** Nothing here is copied from a video. Each chapter is written as the step is actually performed on real hardware. Then the entire server is **wiped and built again from zero, following only this guide**, to find the steps that quietly depended on state we forgot we created. That loop repeats until a single clean run works start to finish, with no deviations.
 
-> **Current status: all eleven chapters (00–10) are written and verified.** The realm boots itself, survives reboots, is backed up nightly with a proven restore, runs entirely off the NVMe, and you can log in from a Linux client and play with a bot party. What remains is **optional** — extra [modules](docs/optional-modules.md) — and the real finish line: **wiping the Pi and rebuilding from this guide alone**, with zero deviations. Chapters appear only as they are completed and verified.
+## <img src="assets/icons/the-guide.png" height="64" alt=""> The guide
 
-## <img src="assets/icons/the-guide.png" height="48" alt=""> The guide
+### **→ [Read the guide](https://jetomev.github.io/pi-kognog-azerothcore/)** ←
 
-| # | Chapter | Status |
-|---|---------|--------|
-| 00 | [Provisioning the Pi (bare metal to ready host)](docs/00-provisioning.md) | ✅ done |
-| 01 | [The client and extracting game data (maps, vmaps, mmaps)](docs/01-client-and-data.md) | ✅ done |
-| 02 | [ARM64 build toolchain and dependencies](docs/02-build-toolchain.md) | ✅ done |
-| 03 | [MySQL and the four databases](docs/03-database.md) | ✅ done |
-| 04 | [Cloning AzerothCore + the Playerbots fork](docs/04-cloning.md) | ✅ done |
-| 05 | [Building (the long one)](docs/05-building.md) | ✅ done |
-| 06 | [Configuration: worldserver, authserver, playerbots](docs/06-configuration.md) | ✅ done |
-| 07 | [First boot: accounts, GM, realm](docs/07-first-boot.md) | ✅ done |
-| 08 | [The client side: connecting and the realmlist](docs/08-client-side.md) | ✅ done |
-| 09 | [Your bot party (tank, healer, two dps)](docs/09-bot-party.md) | ✅ done |
-| 10 | [Keeping it alive: services, backups, updates](docs/10-keeping-it-alive.md) | ✅ done |
+All eleven chapters (00–10), the optional extras, troubleshooting, and Q&A live on the guide site — with a navigation menu, per-page step index, and search. From bare metal to a realm that boots itself, backs itself up, and hosts your bot party.
 
-**Optional:** **[Adding modules](docs/optional-modules.md)** — an auction-house bot (`mod-ah-bot`), quality-of-life modules, difficulty scaling, and the reusable pattern for adding any module. Tackled *after* the base realm works. · **[Off-box backups](docs/optional-offbox-backups.md)** — database copies that live off the Pi (pulled to a desktop, or on a USB drive); make one before any wipe.
+*(The same content is browsable in-repo under [`docs/`](docs/README.md), and every script and systemd unit ships in [`scripts/`](scripts) and [`systemd/`](systemd).)*
 
-Alongside them: **[Troubleshooting](docs/TROUBLESHOOTING.md)** (every error we actually hit, with the fix), **[Sources](docs/SOURCES.md)** and **[Thanks](docs/THANKS.md)** (credit where it's due), and **[Q&A](docs/QA.md)**.
+## <img src="assets/icons/prerequisite-zero.png" height="64" alt=""> Prerequisite zero: the client
 
-## <img src="assets/icons/prerequisite-zero.png" height="48" alt=""> Prerequisite zero: the client
+AzerothCore is a **3.3.5a server, client build 12340** (2010). **Modern retail WoW will not work. WoW Classic will not work either** — different builds, and Blizzard's clients authenticate against Battle.net. You need your own 3.3.5a (12340) client; sourcing it is your responsibility and outside the scope of this guide. We do not link or distribute it.
 
-AzerothCore is a **3.3.5a server, client build 12340** (2010). This matters more than anything else on this page:
+## <img src="assets/icons/contributing.png" height="64" alt=""> Contributing & feedback
 
-- **Modern retail WoW will not work.** It is many expansions past 3.3.5a.
-- **WoW Classic will not work either.** The Classic lines are different builds, and Blizzard's current clients authenticate against Battle.net; they cannot be pointed at a private realm.
-- **Battle.net does not distribute 3.3.5a.**
+Hit a problem the guide did not cover? **[Open an issue](https://github.com/jetomev/pi-kognog-azerothcore/issues)** — that's the front door for every question, correction, and war story. Solved it yourself? Open an issue anyway and tell us how, and it goes into the troubleshooting pages with credit. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-You need your own 3.3.5a (12340) client. Every map, model, and DBC file in this guide is extracted from it. Sourcing it is your responsibility and outside the scope of this guide; we do not link or distribute it.
-
-## <img src="assets/icons/the-hardware.png" height="48" alt=""> The hardware
-
-| | |
-|---|---|
-| **Host** | Raspberry Pi 5, 16 GB RAM (`tpgaming01`, `192.168.1.220`) |
-| **OS** | Ubuntu Server (ARM64), running from the microSD |
-| **Storage** | 64 GB microSD (OS) + 128 GB NVMe on a HAT (game data, build, databases) |
-| **Arch** | ARM64 / aarch64 |
-| **Load target** | one human player + a 3-bot party (tank, healer, 2 dps) |
-
-A note on scale, honestly: this sizing is for **solo play**. A 4-man party on a Pi 5 is comfortable. A populated world with dozens of bots is a different machine's problem; Playerbots is CPU-hungry and the Pi has four cores.
-
-## <img src="assets/icons/brand.png" height="48" alt=""> Brand
-
-Northrend, in a terminal.
-
-| | Hex | Use |
-|---|---|---|
-| Abyss | `#05101B` | background |
-| Deep navy | `#0B1A2A` | panels |
-| Frost blue | `#3FA9E0` | primary accent |
-| Ice | `#7FD4F5` | highlights |
-| Rune glow | `#A8E6FF` | emphasis |
-| Bone | `#E8F1F5` | text |
-
-## <img src="assets/icons/contributing.png" height="48" alt=""> Contributing
-
-Hit a problem this guide did not cover? **Open an issue.** Solved it yourself? **Open an issue anyway and tell us how**, and it goes into the troubleshooting file with credit. See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-That last 5% (the problems we will never hit on our own hardware) only gets documented if people bring them back.
-
-## <img src="assets/icons/authors.png" height="48" alt=""> Authors
+## <img src="assets/icons/authors.png" height="64" alt=""> Authors
 
 A human and an AI, working as co-authors:
 
 - **Balih Kognog** — direction, hardware, testing, the decision to wipe it all and do it again.
 - **Auren Vael** (Claude, Anthropic) — architecture, drafting, and keeping the archive honest. 🪶
 
-## <img src="assets/icons/license.png" height="48" alt=""> License
+## <img src="assets/icons/license.png" height="64" alt=""> License
 
 GPL-3.0-or-later. See [LICENSE](LICENSE).
 

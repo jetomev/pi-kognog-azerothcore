@@ -45,7 +45,7 @@ setup, an off-box backup is one command and your key passphrase.
 
 ### 1. Install the script
 
-Copy [`scripts/pull-backups.sh`](../scripts/pull-backups.sh) somewhere on your desktop. A
+Copy [`scripts/pull-backups.sh`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/scripts/pull-backups.sh) somewhere on your desktop. A
 tidy convention: keep realm tooling **next to the game client**, and let the backup *data*
 land outside it (never store your archive inside a folder you might one day delete or
 replace with a fresh client):
@@ -100,7 +100,7 @@ in. *Never guess at device names; this listing is the safety step.*
 
 ### 2. Install the script
 
-Copy [`scripts/acore-usb-backup.sh`](../scripts/acore-usb-backup.sh) onto the Pi as
+Copy [`scripts/acore-usb-backup.sh`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/scripts/acore-usb-backup.sh) onto the Pi as
 `/usr/local/bin/acore-usb-backup.sh` and `sudo chmod +x` it (or paste it with `sudo tee`
 as in Chapter 10).
 

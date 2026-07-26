@@ -126,7 +126,7 @@ What each part buys you:
   later, from inside a working SSH session, where a mistake is fixable.
 
 A redacted copy of this file lives at
-[`assets/cloud-init/user-data.example`](../assets/cloud-init/user-data.example).
+[`assets/cloud-init/user-data.example`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/assets/cloud-init/user-data.example).
 
 Eject the card cleanly, put it in the Pi, connect ethernet, and power on.
 

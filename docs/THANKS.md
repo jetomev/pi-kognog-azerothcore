@@ -26,6 +26,33 @@ For the technical source list and per-source notes, see **[SOURCES.md](SOURCES.m
 - **[ChromieCraft](https://chromiecraft.com)** — for a clean 3.3.5a client and years of
   keeping WotLK alive and well-run.
 
+## The 3.3.5a add-on keepers
+
+A 2010 client only feels modern because people keep backporting the future into it, mostly
+unpaid and mostly unthanked. The maintainers behind the add-ons and modules our optional
+pages recommend:
+
+- **[Zidras](https://github.com/Zidras)** (DBM-Warmane) · **[Bunny67](https://github.com/Bunny67)**
+  (WeakAuras-WotLK) · **[Aldori15](https://github.com/Aldori15)** (Questie for AzerothCore) ·
+  **[Sattva-108](https://github.com/Sattva-108)** (Leatrix Plus 3.3.5) ·
+  **[s0h2x](https://github.com/s0h2x)** (Immersion-WotLK) ·
+  **[cerberuscx](https://github.com/cerberuscx)** (GSE revival) ·
+  **[ManneN1](https://github.com/ManneN1)** (BigDebuffs) ·
+  **[KhalGH](https://github.com/KhalGH)** (BattlegroundTargets) ·
+  **[GudaLegacy](https://github.com/GudaLegacy)** (GudaBags) ·
+  the **[ElvUI-WotLK](https://github.com/ElvUI-WotLK)** org ·
+  **[Day36512](https://github.com/Day36512)** (AtlasLoot IP) ·
+  **[jejkas](https://github.com/jejkas)** (Auctionator) ·
+  **[Wishmaster117](https://github.com/Wishmaster117)** (MultiBot) ·
+  **[Lichborne-AC](https://github.com/Lichborne-AC)** (Playerbot Manager) ·
+  **[Tsoukie](https://gitlab.com/Tsoukie)** (CompactRaidFrame) ·
+  **[Bennylavaa](https://github.com/Bennylavaa)** (pfQuest-wotlk)
+- **[NoM0Re](https://github.com/NoM0Re)** — for the add-on index that maps the whole scene.
+- **[ZhengPeiRu21](https://github.com/ZhengPeiRu21)** (mod-individual-progression),
+  **[DustinHendrickson](https://github.com/DustinHendrickson)** (bot level brackets), and
+  **[heyitsbench](https://github.com/heyitsbench)** (mod-arac) — module authors beyond the
+  AzerothCore org.
+
 ## Individual writers
 
 - **[sebyx07](https://github.com/sebyx07)** — for the current (Jan 2026) Wine + DXVK gist

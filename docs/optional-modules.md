@@ -51,33 +51,45 @@ documented *as we add it and test it* — not before.
 ## Candidate modules for a solo + Playerbots realm
 
 Curated from the AzerothCore GitHub org, filtered for what actually helps solo play with
-a bot party. Star counts are a rough popularity signal, not an endorsement.
+a bot party. **Every repo below was verified live in July 2026** (exists, not archived,
+with recent activity) — but repos move, so still check before you clone.
 
 ### Tier 1 — genuinely improves solo play
 
 | Module | What it does | Notes |
 |---|---|---|
-| `mod-ah-bot` | Populates the auction house with buyable/sellable items | The reason to bother, on a low-pop realm. **First one we'll add.** |
-| `mod-autobalance` | Scales dungeon/raid difficulty to your actual party size | Powerful but cuts both ways with bots — a full bot party reads as a group and can make content *harder*. Needs tuning. |
-| `mod-aoe-loot` | Loot every nearby corpse in one action | Big quality-of-life when grinding solo. |
-| `mod-learn-spells` | Auto-learns class spells on level-up | No more trips to the trainer. |
+| [`mod-ah-bot`](https://github.com/azerothcore/mod-ah-bot) | Populates the auction house with buyable/sellable items | The reason to bother, on a low-pop realm. **First one we'll add.** |
+| [`mod-autobalance`](https://github.com/azerothcore/mod-autobalance) | Scales dungeon/raid difficulty to your actual party size | Powerful but cuts both ways with bots — a full bot party reads as a group, so combined with Playerbots it can double-compensate. Needs tuning. |
+| [`mod-aoe-loot`](https://github.com/azerothcore/mod-aoe-loot) | Loot every nearby corpse in one action | Big quality-of-life when grinding solo. |
+| [`mod-learn-spells`](https://github.com/azerothcore/mod-learn-spells) | Auto-learns class spells on level-up | No more trips to the trainer. |
 
 ### Tier 2 — quality of life
 
 | Module | What it does | Notes |
 |---|---|---|
-| `mod-transmog` | Change gear appearance (transmogrification) | Most popular AC module. Pure cosmetics. |
-| `mod-npc-buffer` | An NPC that buffs you on demand | Convenience. |
-| `mod-solocraft` | Stat-scales you to handle group content solo | **Alternative** to autobalance — don't run both. May be redundant with a bot party. |
-| `mod-dynamic-xp` / `mod-individual-xp` | Control leveling speed | Blizzlike, faster, or per-account. |
+| [`mod-transmog`](https://github.com/azerothcore/mod-transmog) | Change gear appearance (transmogrification) | Most popular AC module. Pure cosmetics. Actively maintained. |
+| [`mod-npc-buffer`](https://github.com/azerothcore/mod-npc-buffer) | An NPC that buffs you on demand | Convenience. |
+| [`mod-solocraft`](https://github.com/azerothcore/mod-solocraft) | Stat-scales you to handle group content solo | **Alternative** to autobalance — don't run both. May be redundant with a bot party. |
+| [`mod-dynamic-xp`](https://github.com/azerothcore/mod-dynamic-xp) | Control leveling speed | Blizzlike, faster, or per-account. |
 
 ### Tier 3 — situational / thematic
 
 | Module | What it does | Notes |
 |---|---|---|
-| `mod-solo-lfg` | Queue dungeons as a solo player | Bots already fill your group, so situational. |
-| `mod-progression-system` | ChromieCraft-style phased content unlocking | Matches this guide's client origin, but deliberately restricts progression. Advanced taste. |
-| `mod-npc-beastmaster` | Tame and use beasts on any class | Fun. |
+| [`mod-solo-lfg`](https://github.com/azerothcore/mod-solo-lfg) | Queue the dungeon finder without a full player group | Popular *with* Playerbots — queue LFG with your bot party. |
+| [`mod-progression-system`](https://github.com/azerothcore/mod-progression-system) | ChromieCraft-style phased content unlocking (server-wide) | Matches this guide's client origin, but deliberately restricts progression. Advanced taste. |
+| [`mod-npc-beastmaster`](https://github.com/azerothcore/mod-npc-beastmaster) | Tame and use beasts on any class | Fun. |
+
+### Notable additions (verified July 2026)
+
+Worth knowing about, from outside the original shortlist:
+
+| Module | What it does | Notes |
+|---|---|---|
+| [`mod-individual-progression`](https://github.com/ZhengPeiRu21/mod-individual-progression) | **Per-character** Vanilla→TBC→WotLK progression | Not under the azerothcore org (ZhengPeiRu21's repo); very active, widely run *with* Playerbots, and has config hooks for autobalance/transmog/ah-bot. An excellent solo-campaign pick. Pairs with the AtlasLoot build on the [client add-ons](optional-client-addons.md) page. |
+| [`mod-player-bot-level-brackets`](https://github.com/DustinHendrickson/mod-player-bot-level-brackets) | Controls the random-bot **level distribution** | A Playerbots sub-module from the official wiki — directly useful for tuning our ~40-bot world (see also `SyncLevelWithPlayers` in `playerbots.conf`). |
+| [`mod-ale`](https://github.com/azerothcore/mod-ale) | Lua scripting engine (AzerothCore Lua Engine) | **Renamed** — `mod-eluna` now redirects here; use the new name. For writing your own scripted content. |
+| [`mod-arac`](https://github.com/heyitsbench/mod-arac) | All races, all classes | Lives at `heyitsbench/mod-arac` (not the org); needs a client-side patch, so it's a bigger commitment. |
 
 ## Three things to keep in mind
 
@@ -91,5 +103,7 @@ a bot party. Star counts are a rough popularity signal, not an endorsement.
 
 ## Status
 
-Planned. Modules get real, tested instructions here as we add them, starting with
-`mod-ah-bot` once the base realm is confirmed working.
+Planned; all links verified live July 2026. Modules get real, tested instructions here as
+we add them, starting with `mod-ah-bot` once the validation loop is done. For the
+**client-side** half of this story — bot control panels, Questie, DBM, ElvUI — see
+[Client add-ons](optional-client-addons.md).

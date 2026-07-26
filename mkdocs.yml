@@ -54,6 +54,7 @@ nav:
       - "10 · Keeping it alive": 10-keeping-it-alive.md
   - Optional:
       - "Adding modules": optional-modules.md
+      - "Client add-ons": optional-client-addons.md
       - "Off-box backups": optional-offbox-backups.md
   - Reference:
       - Troubleshooting: TROUBLESHOOTING.md

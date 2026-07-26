@@ -32,6 +32,14 @@ For the human thank-you to the people and projects behind these, see
 |---|---|---|---|
 | **mod-playerbots — Playerbot Commands (wiki)** | `mod-playerbots` org | https://github.com/mod-playerbots/mod-playerbots/wiki/Playerbot-Commands | ✅ The **authoritative** in-game command reference. Confirms the `.playerbots bot addclass` / `.playerbots bot add` syntax and the rndbot-vs-altbot distinction. When in doubt, this page over any tutorial. |
 
+## Optional — client add-ons & server modules
+
+| Source | Author | Link | Note |
+|---|---|---|---|
+| **mod-playerbots — Playerbot Addons & Sub-Modules (wiki)** | `mod-playerbots` org | https://github.com/mod-playerbots/mod-playerbots/wiki/Playerbot-Addons-and-Sub%E2%80%90Modules | ✅ The fork's own recommendations for bot-control add-ons (MultiBot, Playerbot Manager, DBM, CompactRaidFrame) and sub-modules. Checked first when curating our lists. |
+| **WoW-3.3.5a-Addons (index)** | NoM0Re | https://github.com/NoM0Re/WoW-3.3.5a-Addons | ✅ Actively maintained, categorized index of hundreds of 3.3.5a add-ons. The discovery source when our curated list doesn't cover a need. |
+| **Individual add-on / module repos** | many maintainers | see [Client add-ons](optional-client-addons.md) + [Adding modules](optional-modules.md) | Each entry on those pages links its own verified repo (all checked live July 2026) rather than being duplicated here. |
+
 ---
 
 *Spotted a better or more current source, or one we should flag? Open an issue — see

@@ -1,4 +1,4 @@
-# Optional — Adding modules
+# <img src="assets/icons/the-guide.png" class="nk-title-icon" alt=""> Optional — Adding modules
 
 **This is an optional section, done *after* the base server works.** The base guide
 (Chapters 00–10) gets you a running Playerbots realm and nothing else. Once that is

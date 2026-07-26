@@ -1,4 +1,4 @@
-# Chapter 04 — Cloning AzerothCore + the Playerbots fork
+# <img src="assets/icons/contributing.png" class="nk-title-icon" alt=""> Chapter 04 — Cloning AzerothCore + the Playerbots fork
 
 Now we get the server's source code. But not *plain* AzerothCore — the version with
 Playerbots, which is a **fork** plus a **module**. Getting the right repositories and

@@ -1,4 +1,4 @@
-# Chapter 01 — The client and extracting game data
+# <img src="assets/icons/prerequisite-zero.png" class="nk-title-icon" alt=""> Chapter 01 — The client and extracting game data
 
 AzerothCore does not ship the game's maps, models, or navigation data — it cannot,
 that content belongs to Blizzard. Instead, you **extract** it from a 3.3.5a client you

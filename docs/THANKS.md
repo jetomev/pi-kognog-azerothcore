@@ -1,4 +1,4 @@
-# Thanks
+# <img src="assets/icons/contributing.png" class="nk-title-icon" alt=""> Thanks
 
 This guide stands on other people's work. None of it — not the server, not the bots, not
 the Linux client — would exist without the projects and individuals below. Credit is not a

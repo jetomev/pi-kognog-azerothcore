@@ -1,4 +1,4 @@
-# Chapter 05 — Building
+# <img src="assets/icons/the-hardware.png" class="nk-title-icon" alt=""> Chapter 05 — Building
 
 The long one. Here we compile AzerothCore, with the Playerbots module baked in, into two
 programs: `authserver` and `worldserver`. On a Raspberry Pi 5 this took about **75

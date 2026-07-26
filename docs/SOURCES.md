@@ -1,4 +1,4 @@
-# Sources
+# <img src="assets/icons/the-guide.png" class="nk-title-icon" alt=""> Sources
 
 Every external source this guide leaned on, with an honest note on each — what it's good
 for, and where it's dated or needs care. This list **grows as the guide grows**; a source

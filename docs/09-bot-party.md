@@ -1,4 +1,4 @@
-# Chapter 09 — Your bot party
+# <img src="assets/icons/contributing.png" class="nk-title-icon" alt=""> Chapter 09 — Your bot party
 
 The reason this whole project exists: a party that plays *with* you. This chapter summons a
 five-man group you lead — tank, healer, two dps — and teaches you to command them. All of

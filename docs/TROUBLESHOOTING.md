@@ -1,4 +1,4 @@
-# Troubleshooting
+# <img src="assets/icons/why-this-guide-exists.png" class="nk-title-icon" alt=""> Troubleshooting
 
 Every problem we actually hit, with the exact error text and what fixed it. Entries are added **as they happen**, not remembered afterwards.
 

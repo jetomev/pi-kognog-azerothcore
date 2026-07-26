@@ -1,4 +1,4 @@
-# Chapter 06 — Configuration
+# <img src="assets/icons/authors.png" class="nk-title-icon" alt=""> Chapter 06 — Configuration
 
 The server binaries exist and the databases are empty and waiting. This chapter connects
 the two: we move the extracted game data onto the Pi, then create and adjust the server

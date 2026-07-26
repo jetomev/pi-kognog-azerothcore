@@ -1,4 +1,4 @@
-# Chapter 08 — The client side
+# <img src="assets/icons/prerequisite-zero.png" class="nk-title-icon" alt=""> Chapter 08 — The client side
 
 The realm runs, but nothing can reach it yet. This chapter makes the server reachable on
 your network, starts the login server, and connects a **Linux** client to it — bare

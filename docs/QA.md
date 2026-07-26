@@ -1,4 +1,4 @@
-# Q&A
+# <img src="assets/icons/what-this-is.png" class="nk-title-icon" alt=""> Q&A
 
 Questions that come up while following the guide, answered plainly. Distinct from [TROUBLESHOOTING.md](TROUBLESHOOTING.md): that file is for *errors*, this one is for *"wait, why?"*.
 

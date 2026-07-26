@@ -1,4 +1,4 @@
-# Chapter 00 — Provisioning the Pi
+# <img src="assets/icons/the-hardware.png" class="nk-title-icon" alt=""> Chapter 00 — Provisioning the Pi
 
 From a bare Raspberry Pi 5 to a hardened, headless host you can SSH into, with a
 data disk mounted and a firewall up. No game software yet. Just a clean machine

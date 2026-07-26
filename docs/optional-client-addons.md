@@ -1,4 +1,4 @@
-# Optional — Client add-ons
+# <img src="assets/icons/prerequisite-zero.png" class="nk-title-icon" alt=""> Optional — Client add-ons
 
 The 3.3.5a modding scene has quietly revived: maintainers keep backporting modern Retail
 and Classic features into the old 12340 client. This page is a **curated, link-verified**

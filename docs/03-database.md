@@ -1,4 +1,4 @@
-# Chapter 03 — MySQL and the four databases
+# <img src="assets/icons/what-this-is.png" class="nk-title-icon" alt=""> Chapter 03 — MySQL and the four databases
 
 The server needs somewhere to keep everything: accounts, characters, the game world,
 and — because we're running Playerbots — the bots' own data. That's four databases inside

@@ -1,4 +1,4 @@
-# Chapter 10 — Keeping it alive
+# <img src="assets/icons/license.png" class="nk-title-icon" alt=""> Chapter 10 — Keeping it alive
 
 Until now the realm only runs while a terminal holds it open. This chapter hands that job
 to the Pi itself: the servers become **systemd services** that start on boot and restart on

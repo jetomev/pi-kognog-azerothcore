@@ -1,4 +1,4 @@
-# Chapter 07 — First boot
+# <img src="assets/icons/why-this-guide-exists.png" class="nk-title-icon" alt=""> Chapter 07 — First boot
 
 The payoff. When `worldserver` starts for the first time, it fills the empty databases,
 loads the world, and hands you a live console. By the end of this chapter you have a

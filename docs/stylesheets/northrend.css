@@ -45,7 +45,7 @@
 /* sidebar text + hover */
 [data-md-color-scheme="slate"] .md-nav {
   font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
-  font-size: 12px;
+  font-size: 14px;
 }
 [data-md-color-scheme="slate"] .md-nav__link--active,
 [data-md-color-scheme="slate"] .md-nav__link:focus,
@@ -53,10 +53,10 @@
   color: #7FD4F5;
 }
 
-/* ---- Type: Verdana 12, with bolder, larger titles ---- */
+/* ---- Type: Verdana 14, with bolder, larger titles ---- */
 [data-md-color-scheme="slate"] .md-typeset {
   font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
 }
 [data-md-color-scheme="slate"] .md-typeset h1 {
@@ -83,8 +83,28 @@
   padding-top: 1em;
   margin-top: 1.8em;
 }
+/* ...but never TWO lines: when a markdown --- rule immediately precedes a
+   section title, the title's own line is dropped so only one shows */
+[data-md-color-scheme="slate"] .md-typeset hr + h2,
+[data-md-color-scheme="slate"] .md-typeset hr + a + h2 {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 1em;
+}
+/* keep the markdown --- rules just as faint as the section lines */
+[data-md-color-scheme="slate"] .md-typeset hr {
+  border-bottom: 1px solid rgba(127, 212, 245, 0.14);
+}
 
-/* ---- Tables: frost-tinted header row ---- */
+/* ---- Tables: centered on the page, frost-tinted header row ---- */
+.md-typeset__scrollwrap {
+  text-align: center;
+}
+.md-typeset__table {
+  display: inline-block;
+  max-width: 100%;
+  text-align: initial;
+}
 [data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
   background-color: #123049;
   color: #A8E6FF;
@@ -104,9 +124,16 @@
 
 /* section icons used on the home page */
 .nk-icon {
-  height: 32px;
+  height: 16px;
   vertical-align: middle;
   margin-right: 0.35em;
+}
+
+/* chapter crests in page titles */
+.nk-title-icon {
+  height: 40px;
+  vertical-align: middle;
+  margin-right: 0.4em;
 }
 
 /* the banner should never overflow */

@@ -1,4 +1,4 @@
-# Chapter 02 — ARM64 build toolchain and dependencies
+# <img src="assets/icons/brand.png" class="nk-title-icon" alt=""> Chapter 02 — ARM64 build toolchain and dependencies
 
 A short chapter: install everything needed to *compile* AzerothCore on the Pi, and
 confirm the versions are new enough. No source is built yet — we are stocking the

@@ -1,4 +1,4 @@
-# Optional — Off-box backups
+# <img src="assets/icons/brand.png" class="nk-title-icon" alt=""> Optional — Off-box backups
 
 Chapter 10 left the realm backed up nightly on **two disks inside the Pi** (NVMe + microSD).
 That covers the most likely failure — one disk dying. It does **not** cover the box itself:

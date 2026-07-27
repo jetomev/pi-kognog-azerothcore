@@ -194,17 +194,24 @@ DYNAMIC_DBS=(acore_auth acore_characters acore_playerbots)
 mkdir -p "$BACKUP_DIR" "$SD_BACKUP_DIR"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 
+echo "AzerothCore backup ${STAMP}"
+echo "Primary copy (NVMe, ${RETENTION_DAYS}-day retention):"
 for db in "${DBS[@]}"; do
+    out="$BACKUP_DIR/${db}-${STAMP}.sql.gz"
     mysqldump --single-transaction --quick --routines --triggers "$db" \
-        | gzip > "$BACKUP_DIR/${db}-${STAMP}.sql.gz"
+        | gzip > "$out"
+    echo "  $db -> $out ($(du -h "$out" | cut -f1))"
 done
 
+echo "Second copy (microSD, ${SD_RETENTION_DAYS}-day retention):"
 for db in "${DYNAMIC_DBS[@]}"; do
     cp "$BACKUP_DIR/${db}-${STAMP}.sql.gz" "$SD_BACKUP_DIR/"
+    echo "  ${db}-${STAMP}.sql.gz -> $SD_BACKUP_DIR/"
 done
 
 find "$BACKUP_DIR" -name '*.sql.gz' -type f -mtime +"$RETENTION_DAYS" -delete
 find "$SD_BACKUP_DIR" -name '*.sql.gz' -type f -mtime +"$SD_RETENTION_DAYS" -delete
+echo "Backup complete."
 EOF
 sudo chmod +x /usr/local/bin/acore-backup.sh
 ```
@@ -220,7 +227,8 @@ sudo chmod +x /usr/local/bin/acore-backup.sh
   corruption sneaks in on a Tuesday and you only play weekends, a 3-day window has already
   recycled every clean copy.
 
-Prove it by hand:
+Prove it by hand — the script reports every dump it writes, and the `ls` lines
+double-check the destinations:
 
 ```
 sudo /usr/local/bin/acore-backup.sh

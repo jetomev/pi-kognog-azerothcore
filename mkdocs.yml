@@ -24,7 +24,8 @@ theme:
     - content.code.copy
 
 extra_css:
-  - stylesheets/northrend.css
+  # the ?v= suffix busts browser caches whenever the stylesheet changes — bump it on edits
+  - stylesheets/northrend.css?v=3
 
 markdown_extensions:
   - admonition

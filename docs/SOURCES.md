@@ -30,7 +30,7 @@ For the human thank-you to the people and projects behind these, see
 
 | Source | Author | Link | Note |
 |---|---|---|---|
-| **mod-playerbots — Playerbot Commands (wiki)** | `mod-playerbots` org | https://github.com/mod-playerbots/mod-playerbots/wiki/Playerbot-Commands | ✅ The **authoritative** in-game command reference. Confirms the `.playerbots bot addclass` / `.playerbots bot add` syntax and the rndbot-vs-altbot distinction. When in doubt, this page over any tutorial. |
+| **mod-playerbots — Playerbot Commands (wiki)** | `mod-playerbots` org | https://github.com/mod-playerbots/mod-playerbots/wiki/Playerbot-Commands | ✅ The **authoritative** in-game command reference. Confirms the `.playerbots bot addclass` / `.playerbots bot add` syntax and the rndbot-vs-altbot distinction, and is the backbone of our [bot handbook](optional-bot-handbook.md). When in doubt, this page over any tutorial. |
 
 ## Optional — client add-ons & server modules
 

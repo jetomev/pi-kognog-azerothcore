@@ -87,7 +87,10 @@ where combat ended and wait for their leader, so tell them to catch up.
 | `/p co +/-<strategy>` | Enable / disable a combat strategy. |
 | `/p nc +/-<strategy>` | Enable / disable a **non-combat** strategy. |
 
-The full, authoritative list lives at the
+This chapter keeps to the essentials. For daily life with the party — vendoring their
+full bags, trading and gearing them, marks and pulls, specs, quests — see the
+**[bot handbook](optional-bot-handbook.md)** in the Optional section. The full,
+authoritative list lives at the
 [mod-playerbots Playerbot Commands wiki](https://github.com/mod-playerbots/mod-playerbots/wiki/Playerbot-Commands).
 
 > **Field discovery — recruiting from the world.** You can also build a party from the

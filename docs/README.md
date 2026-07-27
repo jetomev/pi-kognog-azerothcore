@@ -22,7 +22,7 @@ Chapters are written **in the order they are performed**, on the real hardware, 
 | 09 | [Your bot party](09-bot-party.md) | ✅ done |
 | 10 | [Keeping it alive](10-keeping-it-alive.md) | ✅ done |
 
-**Optional:** [Adding modules](optional-modules.md) · [Client add-ons](optional-client-addons.md) · [Off-box backups](optional-offbox-backups.md) — done *after* the base realm works.
+**Optional:** [The bot handbook](optional-bot-handbook.md) · [Adding modules](optional-modules.md) · [Client add-ons](optional-client-addons.md) · [Off-box backups](optional-offbox-backups.md) — done *after* the base realm works.
 
 **Reference:** [Troubleshooting](TROUBLESHOOTING.md) · [Q&A](QA.md) · [Sources](SOURCES.md) · [Thanks](THANKS.md)
 

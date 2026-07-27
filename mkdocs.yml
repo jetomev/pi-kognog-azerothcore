@@ -53,6 +53,7 @@ nav:
       - "09 · Your bot party": 09-bot-party.md
       - "10 · Keeping it alive": 10-keeping-it-alive.md
   - Optional:
+      - "The bot handbook": optional-bot-handbook.md
       - "Adding modules": optional-modules.md
       - "Client add-ons": optional-client-addons.md
       - "Off-box backups": optional-offbox-backups.md

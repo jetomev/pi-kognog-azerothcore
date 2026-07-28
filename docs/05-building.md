@@ -96,7 +96,9 @@ Chapter 04.
 ### 3. Build (inside `screen`)
 
 The build runs for over an hour, so run it inside `screen` — that keeps it alive even if
-your SSH connection drops.
+your SSH connection drops. Strictly speaking the build works without it, but a dropped
+session at minute 60 kills the compile and costs you the whole hour again; one command now
+buys that insurance, so the guide treats it as part of the step.
 
 ```
 screen -S build

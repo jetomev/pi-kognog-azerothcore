@@ -5,7 +5,7 @@ to the Pi itself: the servers become **systemd services** that start on boot and
 failure, a **nightly backup** protects the databases (with a *proven* restore), and MySQL
 **moves onto the NVMe**, off the microSD that a database would otherwise wear out.
 
-> Everything here runs **on the Pi** (`tpgaming01 $`). SSH in first:
+> Everything here runs **on the Pi**. SSH in first:
 > ```
 > ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 > ```

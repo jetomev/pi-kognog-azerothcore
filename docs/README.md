@@ -39,8 +39,8 @@ Every chapter follows the same shape, so you always know where you are:
 
 ## <img src="assets/icons/why-this-guide-exists.png" class="nk-icon" alt=""> Conventions
 
-- Commands that must run **on the Pi** are marked `tpgaming01 $`.
-- Commands that must run **on your desktop** are marked `desktop $`.
+- Commands are shown bare, with no prompt prefix, so every block copy-pastes directly.
+- Each chapter's prose says whether a block runs **on the Pi** or **on your desktop**.
 - Commands needing root are shown with `sudo` explicitly. Nothing is silently elevated.
 - Paths are absolute wherever ambiguity is possible.
 - Anything that takes more than a few minutes says so, with a rough duration, so you know the difference between "slow" and "hung".

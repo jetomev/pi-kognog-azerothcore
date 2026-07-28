@@ -8,8 +8,7 @@ config files. Short and mostly mechanical — the heavy lifting was Chapters 01 
 > ```
 > ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 > ```
-> Most of this runs on the Pi (`tpgaming01 $`); the data transfer runs on your desktop
-> (`desktop $`).
+> Most of this runs on the Pi; the data transfer runs on your desktop.
 
 ## What this is
 
@@ -38,7 +37,7 @@ databases without correct config. Get these right and first boot (Chapter 07) ju
 On the **Pi**, make the destination folder:
 
 ```
-tpgaming01 $ mkdir -p /mnt/nvme/azerothcore-wotlk/env/dist/data
+mkdir -p /mnt/nvme/azerothcore-wotlk/env/dist/data
 ```
 
 Then, on your **desktop**, send the four data folders (plus `Cameras`) with `rsync` over
@@ -46,7 +45,7 @@ SSH. `rsync` must be installed on **both** machines (`sudo pacman -S rsync` on A
 `sudo apt install rsync` on the Pi — Ubuntu usually has it already):
 
 ```
-desktop $ rsync -avhP -e "ssh -i ~/.ssh/id_ed25519_tpgaming" \
+rsync -avhP -e "ssh -i ~/.ssh/id_ed25519_tpgaming" \
     ~/azeroth-extract/dbc ~/azeroth-extract/maps ~/azeroth-extract/vmaps \
     ~/azeroth-extract/mmaps ~/azeroth-extract/Cameras \
     tphome@192.168.1.220:/mnt/nvme/azerothcore-wotlk/env/dist/data/
@@ -57,9 +56,9 @@ desktop $ rsync -avhP -e "ssh -i ~/.ssh/id_ed25519_tpgaming" \
 - The `mmaps` folder is ~3,700 small files, so the count climbs for a bit; a few minutes
   total is normal. This guide's transfer moved 3.23 GB at ~86 MB/s over wired LAN.
 
-> **No `rsync`?** A dependency-free alternative streams a tar over SSH:
+> **No `rsync`?** A dependency-free alternative streams a tar over SSH (run on your desktop):
 > ```
-> desktop $ tar -C ~/azeroth-extract -cf - dbc maps vmaps mmaps Cameras \
+> tar -C ~/azeroth-extract -cf - dbc maps vmaps mmaps Cameras \
 >     | ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220 \
 >       "tar -C /mnt/nvme/azerothcore-wotlk/env/dist/data -xf -"
 > ```
@@ -67,7 +66,7 @@ desktop $ rsync -avhP -e "ssh -i ~/.ssh/id_ed25519_tpgaming" \
 Verify on the **Pi**:
 
 ```
-tpgaming01 $ du -sh /mnt/nvme/azerothcore-wotlk/env/dist/data/*
+du -sh /mnt/nvme/azerothcore-wotlk/env/dist/data/*
 ```
 
 You want `dbc` (~87M), `maps` (~295M), `vmaps` (~657M), `mmaps` (~2.1G), `Cameras` (~60K).
@@ -78,10 +77,10 @@ The install ships `.conf.dist` templates; the server reads `.conf` files you cre
 them.
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/env/dist/etc
-tpgaming01 $ cp authserver.conf.dist authserver.conf
-tpgaming01 $ cp worldserver.conf.dist worldserver.conf
-tpgaming01 $ cp modules/playerbots.conf.dist modules/playerbots.conf
+cd /mnt/nvme/azerothcore-wotlk/env/dist/etc
+cp authserver.conf.dist authserver.conf
+cp worldserver.conf.dist worldserver.conf
+cp modules/playerbots.conf.dist modules/playerbots.conf
 ```
 
 (We copy `playerbots.conf` now but leave its defaults; bots get configured in Chapter 09.)
@@ -91,7 +90,7 @@ tpgaming01 $ cp modules/playerbots.conf.dist modules/playerbots.conf
 Check the database lines and `DataDir`:
 
 ```
-tpgaming01 $ grep -nE '^(LoginDatabaseInfo|WorldDatabaseInfo|CharacterDatabaseInfo|DataDir)' worldserver.conf
+grep -nE '^(LoginDatabaseInfo|WorldDatabaseInfo|CharacterDatabaseInfo|DataDir)' worldserver.conf
 ```
 
 The three `DatabaseInfo` lines should already read
@@ -103,8 +102,8 @@ lines and in `authserver.conf`'s `LoginDatabaseInfo`.)
 The one change: set `DataDir` to the folder you filled in Step 1 (default is `"."`):
 
 ```
-tpgaming01 $ sed -i 's|^DataDir = ".*"|DataDir = "/mnt/nvme/azerothcore-wotlk/env/dist/data"|' worldserver.conf
-tpgaming01 $ grep -n '^DataDir' worldserver.conf
+sed -i 's|^DataDir = ".*"|DataDir = "/mnt/nvme/azerothcore-wotlk/env/dist/data"|' worldserver.conf
+grep -n '^DataDir' worldserver.conf
 ```
 
 ## ✅ Checkpoint

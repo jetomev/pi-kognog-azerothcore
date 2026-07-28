@@ -19,8 +19,8 @@ Every module follows the same shape. This is the reusable recipe:
 
 1. **Clone it into the source tree's `modules/` folder:**
    ```
-   tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/modules
-   tpgaming01 $ git clone <module-repo-url>
+   cd /mnt/nvme/azerothcore-wotlk/modules
+   git clone <module-repo-url>
    ```
    It must land at `/mnt/nvme/azerothcore-wotlk/modules/mod-<name>`.
 
@@ -28,17 +28,17 @@ Every module follows the same shape. This is the reusable recipe:
    compiles and `worldserver` relinks; everything already built is cached, so it takes
    minutes, not hours:
    ```
-   tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/build
-   tpgaming01 $ cmake .. -DAPPS_BUILD=none -DTOOLS_BUILD=none -DSCRIPTS=static -DMODULES=static
-   tpgaming01 $ make -j4 && make install
+   cd /mnt/nvme/azerothcore-wotlk/build
+   cmake .. -DAPPS_BUILD=none -DTOOLS_BUILD=none -DSCRIPTS=static -DMODULES=static
+   make -j4 && make install
    ```
    Confirm the module appears in the cmake "Modules configuration" list before building.
 
 3. **Apply its config.** Modules ship a `<name>.conf.dist` in the install's `etc/modules/`
    folder. Copy it to `.conf` and edit as needed:
    ```
-   tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/env/dist/etc/modules
-   tpgaming01 $ cp mod_<name>.conf.dist mod_<name>.conf
+   cd /mnt/nvme/azerothcore-wotlk/env/dist/etc/modules
+   cp mod_<name>.conf.dist mod_<name>.conf
    ```
 
 4. **Database:** most modules bring their own SQL. AzerothCore's updater applies it

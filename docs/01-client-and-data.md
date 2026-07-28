@@ -65,7 +65,7 @@ Wine play-client in Chapter 08. This guide keeps it at `~/Games/ChromieCraft_3.3
 Confirm it is the right build. The 3.3.5a enUS `Wow.exe` has a known MD5:
 
 ```
-desktop $ md5sum ~/Games/ChromieCraft_3.3.5a/Wow.exe
+md5sum ~/Games/ChromieCraft_3.3.5a/Wow.exe
 # expected: 45892bdedd0ad70aed4ccd22d9fb5984
 ```
 
@@ -79,7 +79,7 @@ confirmation.) Check that `Data/` holds the MPQ archives — you should see `com
 Install the build dependencies (Arch package names shown; adjust for your distro):
 
 ```
-desktop $ sudo pacman -S --needed cmake boost mariadb-libs
+sudo pacman -S --needed cmake boost mariadb-libs
 ```
 
 - `cmake`, `boost` — the build system and libraries AzerothCore uses.
@@ -92,7 +92,7 @@ Clone the source (shallow is fine — we only need it to build the tools). **Use
 Playerbots fork, not upstream AzerothCore** — this matters:
 
 ```
-desktop $ git clone --depth 1 --branch Playerbot https://github.com/mod-playerbots/azerothcore-wotlk.git ~/azerothcore-tools
+git clone --depth 1 --branch Playerbot https://github.com/mod-playerbots/azerothcore-wotlk.git ~/azerothcore-tools
 ```
 
 > **Why the fork, and not upstream?** The navigation-mesh (`mmaps`) files carry a format
@@ -106,8 +106,8 @@ desktop $ git clone --depth 1 --branch Playerbot https://github.com/mod-playerbo
 Configure a **tools-only** build. Two flags matter and are not obvious:
 
 ```
-desktop $ cd ~/azerothcore-tools && mkdir -p build && cd build
-desktop $ cmake .. \
+cd ~/azerothcore-tools && mkdir -p build && cd build
+cmake .. \
     -DCMAKE_INSTALL_PREFIX=$HOME/azerothcore-tools/install \
     -DTOOLS_BUILD=all -DSCRIPTS=none -DNOJEM=1 \
     -DCMAKE_BUILD_TYPE=Release
@@ -124,7 +124,7 @@ desktop $ cmake .. \
 Compile just the four extractors (not the whole server):
 
 ```
-desktop $ make -j$(nproc) map_extractor vmap4_extractor vmap4_assembler mmaps_generator
+make -j$(nproc) map_extractor vmap4_extractor vmap4_assembler mmaps_generator
 ```
 
 The binaries land in `~/azerothcore-tools/build/src/tools/`.
@@ -136,9 +136,9 @@ Rather than clutter your client folder, make a workspace whose `Data/` is a **sy
 to the client (no multi-GB copy), with the tools beside it:
 
 ```
-desktop $ mkdir -p ~/azeroth-extract && cd ~/azeroth-extract
-desktop $ ln -sfn ~/Games/ChromieCraft_3.3.5a/Data Data
-desktop $ cp ~/azerothcore-tools/build/src/tools/{map_extractor,vmap4_extractor,vmap4_assembler,mmaps_generator} .
+mkdir -p ~/azeroth-extract && cd ~/azeroth-extract
+ln -sfn ~/Games/ChromieCraft_3.3.5a/Data Data
+cp ~/azerothcore-tools/build/src/tools/{map_extractor,vmap4_extractor,vmap4_assembler,mmaps_generator} .
 ```
 
 ### 4. Extract, in order
@@ -148,7 +148,7 @@ Each tool depends on the previous one's output. Run them from `~/azeroth-extract
 **a. Maps, DBC, cameras** (`map_extractor`, no arguments = extract everything):
 
 ```
-desktop $ ./map_extractor
+./map_extractor
 ```
 Produces `dbc/`, `maps/`, `Cameras/`. Prints `Detected client build: 12340`.
 *Reference time: under 1 minute.*
@@ -156,7 +156,7 @@ Produces `dbc/`, `maps/`, `Cameras/`. Prints `Detected client build: 12340`.
 **b. Raw building/model data** (`vmap4_extractor`):
 
 ```
-desktop $ ./vmap4_extractor
+./vmap4_extractor
 ```
 Produces `Buildings/` (an intermediate). Ends with `Work complete. No errors.`
 *Reference time: a few minutes.*
@@ -164,7 +164,7 @@ Produces `Buildings/` (an intermediate). Ends with `Work complete. No errors.`
 **c. Assemble vmaps** (`vmap4_assembler <raw dir> <dest dir>`):
 
 ```
-desktop $ mkdir -p vmaps && ./vmap4_assembler Buildings vmaps
+mkdir -p vmaps && ./vmap4_assembler Buildings vmaps
 ```
 Produces `vmaps/`. Ends with `Ok, all done`. `Buildings/` can be deleted afterward.
 *Reference time: under 1 minute.*
@@ -172,8 +172,8 @@ Produces `vmaps/`. Ends with `Ok, all done`. `Buildings/` can be deleted afterwa
 **d. Navigation meshes** (`mmaps_generator`) — the long one:
 
 ```
-desktop $ cp ~/azerothcore-tools/src/tools/mmaps_generator/mmaps-config.yaml .
-desktop $ mkdir -p mmaps && ./mmaps_generator --threads $(( $(nproc) - 1 ))
+cp ~/azerothcore-tools/src/tools/mmaps_generator/mmaps-config.yaml .
+mkdir -p mmaps && ./mmaps_generator --threads $(( $(nproc) - 1 ))
 ```
 - This version **requires `mmaps-config.yaml`** in the working directory, or it aborts.
 - `--threads` defaults to all cores; we leave one free for the desktop to stay usable.

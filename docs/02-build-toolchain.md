@@ -8,7 +8,7 @@ workshop before the work.
 > ```
 > ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 > ```
-> Everything in this chapter runs on the Pi (`tpgaming01 $`). A graphical client such as
+> Everything in this chapter runs on the Pi. A graphical client such as
 > Termius works too — same host, user, and key.
 
 ## What this is
@@ -41,8 +41,8 @@ This is the AzerothCore-recommended package set for Ubuntu 24.04, plus the MySQL
 **client** development headers the build links against:
 
 ```
-tpgaming01 $ sudo apt update
-tpgaming01 $ sudo apt install -y git cmake make gcc g++ clang \
+sudo apt update
+sudo apt install -y git cmake make gcc g++ clang \
     libssl-dev libbz2-dev libreadline-dev libncurses-dev \
     libboost-all-dev default-libmysqlclient-dev
 ```
@@ -67,11 +67,11 @@ Notes:
 ### 2. Verify the versions
 
 ```
-tpgaming01 $ gcc --version | head -1
-tpgaming01 $ clang --version | head -1
-tpgaming01 $ cmake --version | head -1
-tpgaming01 $ dpkg -s libboost-dev | grep '^Version'
-tpgaming01 $ openssl version
+gcc --version | head -1
+clang --version | head -1
+cmake --version | head -1
+dpkg -s libboost-dev | grep '^Version'
+openssl version
 ```
 
 ## ✅ Checkpoint

@@ -5,9 +5,9 @@ your network, starts the login server, and connects a **Linux** client to it —
 **Wine**, no Windows anywhere. By the end you are standing in Azeroth, logged in with the
 account you made in Chapter 07.
 
-> This chapter has **two halves**. The first runs **on the Pi** (`tpgaming01 $`) to make
-> the realm reachable. The second runs **on your desktop** (`desktop $`) to connect the
-> client. Watch the marker on each command.
+> This chapter has **two halves**. The first runs **on the Pi** to make
+> the realm reachable. The second runs **on your desktop** to connect the
+> client. Watch the heading on each part.
 >
 > Connect to the Pi first:
 > ```
@@ -53,13 +53,13 @@ firewall, and having *both* servers up — so we do them in that order and check
 Read what's set now:
 
 ```
-tpgaming01 $ sudo mysql -e "SELECT id, name, address, localAddress, port FROM acore_auth.realmlist;"
+sudo mysql -e "SELECT id, name, address, localAddress, port FROM acore_auth.realmlist;"
 ```
 
 You'll almost certainly see `address = 127.0.0.1`. Change it to the Pi's LAN IP:
 
 ```
-tpgaming01 $ sudo mysql -e "UPDATE acore_auth.realmlist SET address = '192.168.1.220' WHERE id = 1;"
+sudo mysql -e "UPDATE acore_auth.realmlist SET address = '192.168.1.220' WHERE id = 1;"
 ```
 
 Leave `localAddress` at `127.0.0.1`. AzerothCore hands a client `localAddress` only when
@@ -73,9 +73,9 @@ Chapter 00 locked `ufw` down to SSH. The client needs two more doors — scoped 
 never the whole internet:
 
 ```
-tpgaming01 $ sudo ufw allow from 192.168.1.0/24 to any port 3724 proto tcp
-tpgaming01 $ sudo ufw allow from 192.168.1.0/24 to any port 8085 proto tcp
-tpgaming01 $ sudo ufw status numbered
+sudo ufw allow from 192.168.1.0/24 to any port 3724 proto tcp
+sudo ufw allow from 192.168.1.0/24 to any port 8085 proto tcp
+sudo ufw status numbered
 ```
 
 If these are shut, login fails with no useful error — you type your password and hit a
@@ -87,8 +87,8 @@ wall. `3724` is `authserver`, `8085` is `worldserver` (the `port` from the realm
 foreground terminal each, so you can watch both:
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/env/dist/bin
-tpgaming01 $ ./authserver
+cd /mnt/nvme/azerothcore-wotlk/env/dist/bin
+./authserver
 ```
 
 `authserver` is healthy when it connects to `acore_auth`, updates, and prints:
@@ -101,7 +101,7 @@ That address is your Step 1 change taking effect. Confirm both ports are listeni
 second Pi shell):
 
 ```
-tpgaming01 $ ss -tlnp | grep -E ':3724|:8085'
+ss -tlnp | grep -E ':3724|:8085'
 ```
 
 You want a `LISTEN` line for **each** port.
@@ -141,11 +141,11 @@ We isolate the game in its own `WINEPREFIX` so we never touch your default `~/.w
 so it's disposable (`rm -rf ~/.wow335` to start clean):
 
 ```
-desktop $ export WINEPREFIX=$HOME/.wow335
-desktop $ export WINEARCH=win64
-desktop $ wineboot -u
-desktop $ cd /home/jetomev/Games/ChromieCraft_3.3.5a/
-desktop $ wine Wow.exe
+export WINEPREFIX=$HOME/.wow335
+export WINEARCH=win64
+wineboot -u
+cd /home/jetomev/Games/ChromieCraft_3.3.5a/
+wine Wow.exe
 ```
 
 - `wineboot -u` initializes the prefix. If it offers to install **Mono** or **Gecko**,
@@ -235,9 +235,9 @@ The tidiest place for it is **inside the client folder, next to `Wow.exe`**, so 
 lives in one directory:
 
 ```
-desktop $ cp scripts/play-wotlk.sh ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
-desktop $ chmod +x ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
-desktop $ ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
+cp scripts/play-wotlk.sh ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
+chmod +x ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
+~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
 ```
 
 That single command is now "play the game" (the script's `GAME_DIR` default already points

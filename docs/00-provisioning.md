@@ -56,7 +56,7 @@ Do this **on your desktop**. We use key-only login and never a password, so the 
 must exist before we provision.
 
 ```
-desktop $ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_tpgaming -C "you@tpgaming01"
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_tpgaming -C "you@tpgaming01"
 ```
 
 - `-t ed25519` — a modern, short, strong key type.
@@ -134,10 +134,10 @@ Eject the card cleanly, put it in the Pi, connect ethernet, and power on.
 
 Give it 3–5 minutes on the first boot — cloud-init runs, installs `avahi-daemon`, and
 reboots. Find the address it took from your router's DHCP/client list (ours appeared
-as `tpgaming01`), then:
+as `tpgaming01`), then, from your desktop:
 
 ```
-desktop $ ssh -i ~/.ssh/id_ed25519_tpgaming tphome@<dhcp-ip>
+ssh -i ~/.ssh/id_ed25519_tpgaming tphome@<dhcp-ip>
 ```
 
 Enter your key passphrase.
@@ -149,7 +149,7 @@ Enter your key passphrase.
 Once in, confirm cloud-init finished cleanly:
 
 ```
-tpgaming01 $ cloud-init status --long
+cloud-init status --long
 ```
 
 You want `status: done` and `errors: []`.
@@ -159,7 +159,7 @@ You want `status: done` and `errors: []`.
 Check the drive is seen:
 
 ```
-tpgaming01 $ lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
+lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
 ```
 
 You should see an `nvme0n1`. **If you do not**, stop and read the Troubleshooting entry
@@ -171,11 +171,11 @@ certain `nvme0n1` is the blank data drive and not something you care about** —
 `lsblk` shows sizes and mountpoints; nothing you want should be mounted on it.
 
 ```
-tpgaming01 $ sudo wipefs -a /dev/nvme0n1
-tpgaming01 $ sudo parted /dev/nvme0n1 --script mklabel gpt
-tpgaming01 $ sudo parted /dev/nvme0n1 --script mkpart primary ext4 0% 100%
-tpgaming01 $ sudo partprobe /dev/nvme0n1
-tpgaming01 $ sudo mkfs.ext4 -m 1 -L azeroth-data /dev/nvme0n1p1
+sudo wipefs -a /dev/nvme0n1
+sudo parted /dev/nvme0n1 --script mklabel gpt
+sudo parted /dev/nvme0n1 --script mkpart primary ext4 0% 100%
+sudo partprobe /dev/nvme0n1
+sudo mkfs.ext4 -m 1 -L azeroth-data /dev/nvme0n1p1
 ```
 
 - `-m 1` lowers ext4's root-reserved space from the default 5 % to 1 %. On a data disk
@@ -186,7 +186,7 @@ Now mount it permanently, **by UUID** (device names can renumber; UUIDs do not).
 the UUID, then add it to `/etc/fstab`:
 
 ```
-tpgaming01 $ sudo blkid /dev/nvme0n1p1
+sudo blkid /dev/nvme0n1p1
 ```
 
 Take the `UUID="…"` value and append a line to `/etc/fstab` (use **your** UUID):
@@ -205,11 +205,11 @@ UUID=<your-uuid>  /mnt/nvme  ext4  defaults,noatime,nofail,x-systemd.device-time
 Then create the mountpoint, mount, and take ownership:
 
 ```
-tpgaming01 $ sudo mkdir -p /mnt/nvme
-tpgaming01 $ sudo systemctl daemon-reload
-tpgaming01 $ sudo mount -a
-tpgaming01 $ sudo chown tphome:tphome /mnt/nvme
-tpgaming01 $ findmnt /mnt/nvme
+sudo mkdir -p /mnt/nvme
+sudo systemctl daemon-reload
+sudo mount -a
+sudo chown tphome:tphome /mnt/nvme
+findmnt /mnt/nvme
 ```
 
 If `mount -a` errors, do **not** reboot — fix the fstab line first.
@@ -220,8 +220,8 @@ Now, from a working SSH session, we pin the address. First **read your real gate
 and DNS** — do not assume `192.168.1.1`; ours was `192.168.1.254`:
 
 ```
-tpgaming01 $ ip route | grep default
-tpgaming01 $ resolvectl status
+ip route | grep default
+resolvectl status
 ```
 
 Note the `default via X.X.X.X` value (gateway) and the DNS servers.
@@ -230,7 +230,7 @@ Tell cloud-init to stop managing the network, then write a static netplan config
 (substitute **your** address, gateway, and DNS):
 
 ```
-tpgaming01 $ echo 'network: {config: disabled}' | sudo tee /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+echo 'network: {config: disabled}' | sudo tee /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
 ```
 
 ```yaml
@@ -258,17 +258,22 @@ Remove the old DHCP config, lock permissions, and **validate the syntax without
 applying it** (this does not touch the live connection):
 
 ```
-tpgaming01 $ sudo rm /etc/netplan/50-cloud-init.yaml
-tpgaming01 $ sudo chmod 600 /etc/netplan/99-static.yaml
-tpgaming01 $ sudo netplan generate
+sudo rm /etc/netplan/50-cloud-init.yaml
+sudo chmod 600 /etc/netplan/99-static.yaml
+sudo netplan generate
 ```
 
 Silence from `netplan generate` means it is valid. Apply by rebooting, which proves the
 box comes up static on its own:
 
 ```
-tpgaming01 $ sudo reboot
-desktop $ ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
+sudo reboot
+```
+
+Then reconnect from your desktop:
+
+```
+ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 ```
 
 > **If `.220` never answers:** the box now has no DHCP fallback, so a wrong static makes
@@ -282,11 +287,11 @@ Deny everything inbound except SSH. Later chapters open the game ports; nothing 
 gets in. **Allow SSH before enabling, or you lock yourself out.**
 
 ```
-tpgaming01 $ sudo ufw default deny incoming
-tpgaming01 $ sudo ufw default allow outgoing
-tpgaming01 $ sudo ufw allow OpenSSH
-tpgaming01 $ sudo ufw enable
-tpgaming01 $ sudo ufw status verbose
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow OpenSSH
+sudo ufw enable
+sudo ufw status verbose
 ```
 
 `ufw enable` warns it may disrupt SSH — answer `y`. Because SSH is already allowed, your
@@ -298,9 +303,9 @@ Bring the OS current before anything is built on it, so your baseline snapshot i
 already patched:
 
 ```
-tpgaming01 $ sudo apt update
-tpgaming01 $ sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt full-upgrade -y
-tpgaming01 $ sudo apt autoremove --purge -y
+sudo apt update
+sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt full-upgrade -y
+sudo apt autoremove --purge -y
 ```
 
 The env vars keep it non-interactive so no blue "restart services?" dialog stalls a
@@ -312,10 +317,17 @@ down, move the card to your desktop, identify it with `lsblk` (match the size an
 `system-boot`/`writable` labels — **do not guess the device**), then read it to a
 compressed image:
 
+On the Pi:
+
 ```
-tpgaming01 $ sudo shutdown -h now
-desktop $ lsblk
-desktop $ sudo dd if=/dev/sdX bs=4M status=progress | gzip > ~/pi-baselines/tpgaming01-ch00-baseline.img.gz
+sudo shutdown -h now
+```
+
+On the desktop:
+
+```
+lsblk
+sudo dd if=/dev/sdX bs=4M status=progress | gzip > ~/pi-baselines/tpgaming01-ch00-baseline.img.gz
 ```
 
 Reading the card to a file is non-destructive; the only dangerous direction is writing
@@ -327,9 +339,9 @@ provisioned state.
 from your desktop:
 
 ```
-desktop $ sudo eject /dev/sdX          # replace with your card device; safely flush + eject
+sudo eject /dev/sdX          # replace with your card device; safely flush + eject
 # move the microSD from the desktop back into the Pi, power on, wait ~1 min
-desktop $ ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
+ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 ```
 
 The Pi boots straight back to `tpgaming01` at its static address — the image was a copy,
@@ -342,11 +354,16 @@ the card itself is unchanged.
 From your desktop, a single reconnect and check:
 
 ```
-desktop $ ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
-tpgaming01 $ hostnamectl --static          # tpgaming01
-tpgaming01 $ ip -brief -4 addr show eth0    # 192.168.1.220/24
-tpgaming01 $ findmnt /mnt/nvme             # mounted from nvme0n1p1
-tpgaming01 $ sudo ufw status | head -1     # Status: active
+ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
+```
+
+Then on the Pi:
+
+```
+hostnamectl --static          # tpgaming01
+ip -brief -4 addr show eth0    # 192.168.1.220/24
+findmnt /mnt/nvme             # mounted from nvme0n1p1
+sudo ufw status | head -1     # Status: active
 ```
 
 If the box answers at its static address, mounts its data disk, and the firewall is

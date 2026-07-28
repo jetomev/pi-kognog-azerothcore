@@ -9,7 +9,7 @@ logs in as, and confirm it works.
 > ```
 > ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 > ```
-> Everything in this chapter runs on the Pi (`tpgaming01 $`).
+> Everything in this chapter runs on the Pi.
 
 ## What this is
 
@@ -51,10 +51,10 @@ create all four up front.
 ### 1. Install MySQL 8.0
 
 ```
-tpgaming01 $ sudo apt install -y mysql-server
-tpgaming01 $ sudo systemctl enable --now mysql
-tpgaming01 $ sudo systemctl status mysql --no-pager | head -3
-tpgaming01 $ mysql --version
+sudo apt install -y mysql-server
+sudo systemctl enable --now mysql
+sudo systemctl status mysql --no-pager | head -3
+mysql --version
 ```
 
 You should see `active (running)` and a version like `8.0.x`.
@@ -70,7 +70,7 @@ no password), so there's no `mysql_secure_installation` ritual needed. Paste thi
 block — it is AzerothCore's create script **plus** the Playerbots database:
 
 ```
-tpgaming01 $ sudo mysql <<'SQL'
+sudo mysql <<'SQL'
 DROP USER IF EXISTS 'acore'@'localhost';
 CREATE USER 'acore'@'localhost' IDENTIFIED BY 'acore' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;
 CREATE DATABASE IF NOT EXISTS `acore_world`      DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
@@ -93,9 +93,9 @@ SQL
 ### 3. Verify
 
 ```
-tpgaming01 $ sudo mysql -e "SHOW DATABASES;"
-tpgaming01 $ mysql -u acore -pacore -e "SHOW DATABASES;"
-tpgaming01 $ sudo ss -tlnp | grep 3306
+sudo mysql -e "SHOW DATABASES;"
+mysql -u acore -pacore -e "SHOW DATABASES;"
+sudo ss -tlnp | grep 3306
 ```
 
 - The first lists all four `acore_*` databases.
@@ -109,8 +109,8 @@ Unlike MariaDB, **MySQL 8.0 enables the binary log by default**, and it grows ov
 on a small disk that adds up. AzerothCore does not need it. To turn it off:
 
 ```
-tpgaming01 $ echo -e "[mysqld]\nskip-log-bin" | sudo tee /etc/mysql/mysql.conf.d/zz-acore.cnf
-tpgaming01 $ sudo systemctl restart mysql
+echo -e "[mysqld]\nskip-log-bin" | sudo tee /etc/mysql/mysql.conf.d/zz-acore.cnf
+sudo systemctl restart mysql
 ```
 
 (Skip this if you want point-in-time recovery and don't mind the disk usage.)

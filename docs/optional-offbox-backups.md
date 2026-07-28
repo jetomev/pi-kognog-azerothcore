@@ -51,8 +51,8 @@ land outside it (never store your archive inside a folder you might one day dele
 replace with a fresh client):
 
 ```
-desktop $ cp scripts/pull-backups.sh ~/Games/ChromieCraft_3.3.5a/pull-backups.sh
-desktop $ chmod +x ~/Games/ChromieCraft_3.3.5a/pull-backups.sh
+cp scripts/pull-backups.sh ~/Games/ChromieCraft_3.3.5a/pull-backups.sh
+chmod +x ~/Games/ChromieCraft_3.3.5a/pull-backups.sh
 ```
 
 Edit the variables at the top to match your machine (Pi address, key path, and where copies
@@ -60,8 +60,10 @@ should land — default `~/Backups/tpgaming01-mysql`).
 
 ### 2. Run it
 
+On the desktop:
+
 ```
-desktop $ ~/Games/ChromieCraft_3.3.5a/pull-backups.sh
+~/Games/ChromieCraft_3.3.5a/pull-backups.sh
 ```
 
 Enter your key passphrase. Expected: an rsync transfer list of the `.sql.gz` files, then
@@ -91,7 +93,7 @@ drawer, a keychain, another building — wherever you put it.
 ### 1. Plug it in and identify it
 
 ```
-tpgaming01 $ lsblk -o NAME,SIZE,FSTYPE,LABEL,VENDOR,MODEL,MOUNTPOINTS
+lsblk -o NAME,SIZE,FSTYPE,LABEL,VENDOR,MODEL,MOUNTPOINTS
 ```
 
 The stick appears as **`sda`** with a partition **`sda1`** — alongside the familiar
@@ -112,9 +114,11 @@ Its guard rails, because writing to the wrong device is the classic self-inflict
 
 ### 3. Run it
 
+On the Pi:
+
 ```
-tpgaming01 $ sudo acore-usb-backup.sh              # default /dev/sda1
-tpgaming01 $ sudo acore-usb-backup.sh /dev/sdb1    # or name the partition explicitly
+sudo acore-usb-backup.sh              # default /dev/sda1
+sudo acore-usb-backup.sh /dev/sdb1    # or name the partition explicitly
 ```
 
 Expected: the rsync file list, then `Done. Drive unmounted - SAFE TO UNPLUG.` Unplug it.
@@ -124,7 +128,7 @@ Expected: the rsync file list, then `Done. Drive unmounted - SAFE TO UNPLUG.` Un
 Plug it back in and confirm the files really landed:
 
 ```
-tpgaming01 $ sudo mount /dev/sda1 /mnt/usb-backup && ls -lh /mnt/usb-backup/tpgaming01-mysql/ && sudo umount /mnt/usb-backup
+sudo mount /dev/sda1 /mnt/usb-backup && ls -lh /mnt/usb-backup/tpgaming01-mysql/ && sudo umount /mnt/usb-backup
 ```
 
 Every dump listed with sane sizes = a proven copy. Put the stick somewhere that isn't next
@@ -138,9 +142,9 @@ Same as Chapter 10's restore test, from wherever the copy is. On a rebuilt Pi (d
 recreated empty per Chapter 03), copy the dumps over and load them:
 
 ```
-tpgaming01 $ zcat acore_auth-<stamp>.sql.gz        | sudo mysql acore_auth
-tpgaming01 $ zcat acore_characters-<stamp>.sql.gz  | sudo mysql acore_characters
-tpgaming01 $ zcat acore_playerbots-<stamp>.sql.gz  | sudo mysql acore_playerbots
+zcat acore_auth-<stamp>.sql.gz        | sudo mysql acore_auth
+zcat acore_characters-<stamp>.sql.gz  | sudo mysql acore_characters
+zcat acore_playerbots-<stamp>.sql.gz  | sudo mysql acore_playerbots
 ```
 
 Use the **same timestamp** for all three (they were dumped together and reference each

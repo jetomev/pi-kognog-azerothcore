@@ -8,7 +8,7 @@ minutes**. Plan for it — start it, walk away, come back.
 > ```
 > ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 > ```
-> Everything in this chapter runs on the Pi (`tpgaming01 $`).
+> Everything in this chapter runs on the Pi.
 
 ## What this is
 
@@ -52,13 +52,13 @@ build. An 8 GB swapfile turns that cliff into a soft landing, and it protects th
 server later too. We put it on the NVMe (fast, spares the microSD).
 
 ```
-tpgaming01 $ sudo fallocate -l 8G /mnt/nvme/swapfile
-tpgaming01 $ sudo chmod 600 /mnt/nvme/swapfile
-tpgaming01 $ sudo mkswap /mnt/nvme/swapfile
-tpgaming01 $ sudo swapon /mnt/nvme/swapfile
-tpgaming01 $ echo '/mnt/nvme/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-tpgaming01 $ echo 'vm.swappiness=10' | sudo tee /etc/sysctl.d/99-swappiness.conf
-tpgaming01 $ sudo sysctl -p /etc/sysctl.d/99-swappiness.conf
+sudo fallocate -l 8G /mnt/nvme/swapfile
+sudo chmod 600 /mnt/nvme/swapfile
+sudo mkswap /mnt/nvme/swapfile
+sudo swapon /mnt/nvme/swapfile
+echo '/mnt/nvme/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+echo 'vm.swappiness=10' | sudo tee /etc/sysctl.d/99-swappiness.conf
+sudo sysctl -p /etc/sysctl.d/99-swappiness.conf
 ```
 
 `free -h` should now show `Swap: 8.0Gi`. `swappiness=10` means the kernel prefers RAM and
@@ -67,9 +67,9 @@ only spills to swap under real pressure.
 ### 2. Configure with CMake
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk
-tpgaming01 $ mkdir -p build && cd build
-tpgaming01 $ cmake .. \
+cd /mnt/nvme/azerothcore-wotlk
+mkdir -p build && cd build
+cmake .. \
     -DCMAKE_INSTALL_PREFIX=/mnt/nvme/azerothcore-wotlk/env/dist \
     -DCMAKE_C_COMPILER=/usr/bin/clang \
     -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
@@ -99,14 +99,14 @@ The build runs for over an hour, so run it inside `screen` — that keeps it ali
 your SSH connection drops.
 
 ```
-tpgaming01 $ screen -S build
+screen -S build
 ```
 
 Inside the screen session:
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/build
-tpgaming01 $ { time make -j4 ; } 2>&1 | tee /mnt/nvme/build.log
+cd /mnt/nvme/azerothcore-wotlk/build
+{ time make -j4 ; } 2>&1 | tee /mnt/nvme/build.log
 ```
 
 Then **detach** so it survives a disconnect: press `Ctrl-A`, release, then `D`.
@@ -121,16 +121,16 @@ Success looks like `[100%] Built target worldserver` and a `real ...m...s` timin
 ### 4. Install
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/build
-tpgaming01 $ make install
+cd /mnt/nvme/azerothcore-wotlk/build
+make install
 ```
 
 This copies the binaries and config templates into `env/dist`. Verify:
 
 ```
-tpgaming01 $ ls -lh /mnt/nvme/azerothcore-wotlk/env/dist/bin/
-tpgaming01 $ ls /mnt/nvme/azerothcore-wotlk/env/dist/etc/
-tpgaming01 $ ls /mnt/nvme/azerothcore-wotlk/env/dist/etc/modules/
+ls -lh /mnt/nvme/azerothcore-wotlk/env/dist/bin/
+ls /mnt/nvme/azerothcore-wotlk/env/dist/etc/
+ls /mnt/nvme/azerothcore-wotlk/env/dist/etc/modules/
 ```
 
 ## ✅ Checkpoint

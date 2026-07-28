@@ -9,7 +9,7 @@ can carry.
 > ```
 > ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 > ```
-> Everything here runs on the Pi (`tpgaming01 $`).
+> Everything here runs on the Pi.
 
 ## What this is
 
@@ -36,9 +36,9 @@ The first import can take **10–30 minutes** on a Pi — it writes the whole wo
 MySQL. Run it in `screen` so a dropped SSH connection can't kill it.
 
 ```
-tpgaming01 $ screen -S world
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/env/dist/bin
-tpgaming01 $ ./worldserver
+screen -S world
+cd /mnt/nvme/azerothcore-wotlk/env/dist/bin
+./worldserver
 ```
 
 *What you'll see, in order:*
@@ -86,9 +86,9 @@ AC> server shutdown 1
 Then edit `playerbots.conf`:
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/env/dist/etc/modules
-tpgaming01 $ sed -i 's/^AiPlayerbot.MinRandomBots = .*/AiPlayerbot.MinRandomBots = 20/' playerbots.conf
-tpgaming01 $ sed -i 's/^AiPlayerbot.MaxRandomBots = .*/AiPlayerbot.MaxRandomBots = 40/' playerbots.conf
+cd /mnt/nvme/azerothcore-wotlk/env/dist/etc/modules
+sed -i 's/^AiPlayerbot.MinRandomBots = .*/AiPlayerbot.MinRandomBots = 20/' playerbots.conf
+sed -i 's/^AiPlayerbot.MaxRandomBots = .*/AiPlayerbot.MaxRandomBots = 40/' playerbots.conf
 ```
 
 - ~40 keeps the world feeling alive while leaving the Pi headroom (roughly 10× less load
@@ -100,8 +100,8 @@ tpgaming01 $ sed -i 's/^AiPlayerbot.MaxRandomBots = .*/AiPlayerbot.MaxRandomBots
 Restart to apply:
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/env/dist/bin
-tpgaming01 $ ./worldserver
+cd /mnt/nvme/azerothcore-wotlk/env/dist/bin
+./worldserver
 ```
 
 The population settles toward your new number over a few minutes, and the tick diff falls.

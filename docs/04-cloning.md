@@ -8,7 +8,7 @@ branches here is the single most important correctness step in the whole guide.
 > ```
 > ssh -i ~/.ssh/id_ed25519_tpgaming tphome@192.168.1.220
 > ```
-> Everything in this chapter runs on the Pi (`tpgaming01 $`).
+> Everything in this chapter runs on the Pi.
 
 ## What this is
 
@@ -53,10 +53,10 @@ The first clone pulls AzerothCore's full history (~1.3 GB) — a few minutes. We
 **full** clone, not shallow, because the build reads git revision information.
 
 ```
-tpgaming01 $ cd /mnt/nvme
-tpgaming01 $ git clone https://github.com/mod-playerbots/azerothcore-wotlk.git --branch=Playerbot
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk/modules
-tpgaming01 $ git clone https://github.com/mod-playerbots/mod-playerbots.git --branch=master
+cd /mnt/nvme
+git clone https://github.com/mod-playerbots/azerothcore-wotlk.git --branch=Playerbot
+cd /mnt/nvme/azerothcore-wotlk/modules
+git clone https://github.com/mod-playerbots/mod-playerbots.git --branch=master
 ```
 
 The module **must** end up at `/mnt/nvme/azerothcore-wotlk/modules/mod-playerbots`. The
@@ -66,11 +66,11 @@ is simply ignored.
 ### 2. Verify the branches and the module location
 
 ```
-tpgaming01 $ cd /mnt/nvme/azerothcore-wotlk
-tpgaming01 $ echo "core branch : $(git branch --show-current)"
-tpgaming01 $ cd modules/mod-playerbots
-tpgaming01 $ echo "module branch: $(git branch --show-current)"
-tpgaming01 $ echo "module path : $(pwd)"
+cd /mnt/nvme/azerothcore-wotlk
+echo "core branch : $(git branch --show-current)"
+cd modules/mod-playerbots
+echo "module branch: $(git branch --show-current)"
+echo "module path : $(pwd)"
 ```
 
 ## ✅ Checkpoint

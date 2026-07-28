@@ -23,6 +23,7 @@ For the human thank-you to the people and projects behind these, see
 | **WoW 3.3.5a on Linux: Wine + DXVK (gist)** | sebyx07 | https://gist.github.com/sebyx07/e14b8d64e85e13162db3748ea20caea2 | ✅ **Current (Jan 2026).** The modern recipe we recommend for tier 2: win64 prefix, **DXVK 2.5.3**, keep `gxApi "d3d9"` (OpenGL bypasses DXVK), launch with `gamemoderun`. |
 | **Warmane forum — 3.3.5a on CachyOS/Arch** | Warmane community | https://forum.warmane.com/showthread.php?t=484207 | Community Arch/CachyOS play notes. Useful for distro-specific gotchas (KDE stealing shortcuts, Wine zombie processes after exit). |
 | **WineHQ** | WineHQ project | https://www.winehq.org | The compatibility layer itself. Reference tested: `wine-11.13` Staging. |
+| **DXVK** | doitsujin (Philip Rebohle) | https://github.com/doitsujin/dxvk | D3D9→Vulkan translation layer, the tier-2 renderer. Reference tested: **3.0.2** (the `x32/d3d9.dll` is the one the 32-bit client loads). Adopted live after wined3d showed minute-long mid-session client freezes. |
 | **DXVK** | Philip Rebohle (doitsujin) | https://github.com/doitsujin/dxvk | D3D9→Vulkan translation; the tier-2 performance layer. |
 | **Lutris** | Lutris project | https://lutris.net | Optional managed runner (Warmane WoW install script exists). No raw-perf gain over a hand-made prefix for 3.3.5a, but tidier to manage. |
 

@@ -260,10 +260,49 @@ prefer a managed setup:
 - **Steam + Proton** — runs the client as a "non-Steam game" under Proton. Viable if Steam
   is already your hub.
 
-**Tier 2 — DXVK (still bare Wine, recommended for polish):** DXVK translates the game's
-DirectX 9 to Vulkan and is just a set of DLLs dropped into the prefix. Keep `gxApi "d3d9"`,
-install DXVK into `~/.wow335`, and launch with `gamemoderun wine Wow.exe`. This is where
-the smoothest performance lives, and it stays "Wine only" — no launcher required.
+**Tier 2 — DXVK (still bare Wine, recommended):** [DXVK](https://github.com/doitsujin/dxvk)
+translates the game's DirectX 9 to Vulkan — just a set of DLLs dropped into the prefix. Wine's
+built-in D3D9 path (wined3d) works, but we've seen it stall the client for a minute at a time
+mid-session; DXVK is the fix, and where the smoothest performance lives. It stays "Wine
+only" — no launcher required.
+
+Prerequisites: a working Vulkan driver for your GPU, **including the 32-bit libraries** —
+the 3.3.5a client is a 32-bit program (on Arch: `lib32-vulkan-icd-loader` plus your GPU's
+`lib32-*` driver package; on Debian/Ubuntu: `libvulkan1:i386` plus the i386 Vulkan driver).
+
+1. Download the latest release tarball from the
+   [DXVK releases page](https://github.com/doitsujin/dxvk/releases) (tested with 3.0.2)
+   and extract it.
+2. Copy the D3D9 DLLs into the prefix — back up Wine's originals first. The 32-bit one in
+   `syswow64` is the copy the client actually loads:
+
+   ```bash
+   P=~/.wow335/drive_c/windows
+   cp "$P/syswow64/d3d9.dll" "$P/syswow64/d3d9.dll.wine-orig"
+   cp "$P/system32/d3d9.dll" "$P/system32/d3d9.dll.wine-orig"
+   cp dxvk-3.0.2/x32/d3d9.dll "$P/syswow64/d3d9.dll"
+   cp dxvk-3.0.2/x64/d3d9.dll "$P/system32/d3d9.dll"
+   ```
+
+3. Tell Wine to use the native (DXVK) DLL instead of its builtin:
+
+   ```bash
+   WINEPREFIX=~/.wow335 wine reg add 'HKCU\Software\Wine\DllOverrides' /v d3d9 /d native /f
+   ```
+
+4. Verify with DXVK's overlay — launch once as:
+
+   ```bash
+   DXVK_HUD=version,fps ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
+   ```
+
+   A small top-left overlay naming your DXVK version and GPU is the proof; exit and launch
+   normally from then on. Keep `gxApi "d3d9"` in `Config.wtf` (it's what DXVK hooks;
+   `opengl` bypasses it). First launch may micro-stutter as DXVK compiles each new shader —
+   that settles quickly and doesn't come back.
+
+To roll back: restore the two `.wine-orig` files over `d3d9.dll` and
+`wine reg delete 'HKCU\Software\Wine\DllOverrides' /v d3d9 /f`.
 
 ## ✅ Checkpoint
 

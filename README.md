@@ -2,7 +2,7 @@
 
 <img src="assets/banner.png" alt="pi-kognog-azerothcore — Wrath of the Lich King · 3.3.5a · Playerbots · a solo realm raised by hand on a Raspberry Pi 5" width="100%">
 
-![Status: complete, validation pending](https://img.shields.io/badge/Status-Chapters%2000--10%20done-3FA9E0.svg)
+![Status: v1.0.0, validated](https://img.shields.io/badge/Status-v1.0.0%20%C2%B7%20Validated-3FA9E0.svg)
 ![Platform: Raspberry Pi 5](https://img.shields.io/badge/Platform-Raspberry%20Pi%205%20(ARM64)-7FD4F5.svg)
 ![Core: AzerothCore](https://img.shields.io/badge/Core-AzerothCore%203.3.5a-0B1A2A.svg)
 ![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)
@@ -24,7 +24,7 @@ There are many AzerothCore tutorials. Almost all of them are **x86_64**, and mos
 This one is different in two ways:
 
 1. **It targets ARM64.** Running AzerothCore, and especially **Playerbots**, on a Raspberry Pi is barely documented. The problems you hit there often have no answer anywhere. This guide is where those answers get written down.
-2. **It is written live, then destroyed and rebuilt.** Nothing here is copied from a video. Each chapter is written as the step is actually performed on real hardware. Then the entire server is **wiped and built again from zero, following only this guide**, to find the steps that quietly depended on state we forgot we created. That loop repeats until a single clean run works start to finish, with no deviations.
+2. **It is written live, then destroyed and rebuilt.** Nothing here is copied from a video. Each chapter is written as the step is actually performed on real hardware. Then the entire server is **wiped and built again from zero, following only this guide**, to find the steps that quietly depended on state we forgot we created. That loop repeats until a single clean run works start to finish, with no deviations. **It has now happened:** on 2026-07-27 the Pi was wiped and the realm rebuilt from these pages alone — zero deviations, in one sitting.
 
 ## <img src="assets/icons/the-guide.png" height="64" alt=""> The guide
 

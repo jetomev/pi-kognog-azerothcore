@@ -93,6 +93,8 @@ This guide is not finished when the server runs. It is finished when the guide *
 4. Repeat until one run completes start to finish with zero deviations.
 5. Then publish, and let other people's hardware find the rest.
 
+**Status: validated.** On 2026-07-27 the Pi was wiped back to bare provisioning and the realm rebuilt from these pages alone, start to finish, with **zero procedural deviations** — the run surfaced only usability polish (cleaner copy-paste blocks, a chattier backup script), folded in the same day. That run is release **v1.0.0**.
+
 ## <img src="assets/icons/contributing.png" class="nk-icon" alt=""> Feedback
 
 Hit a problem this guide did not cover? **[Open an issue](https://github.com/jetomev/pi-kognog-azerothcore/issues)** — that's the front door for every question, correction, and war story. Solved something yourself? Open an issue anyway and tell us how; it goes into [Troubleshooting](TROUBLESHOOTING.md) with credit. That last 5% (the problems we will never hit on our own hardware) only gets documented if people bring them back.

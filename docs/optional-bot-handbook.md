@@ -83,7 +83,7 @@ a trade silently fails if the bot has no free slot. Empty them first.
 | `maintenance` | Housekeeping: repair, learn new spells, stock consumables. |
 | `b [item]` | Buy an item from the vendor you're at. |
 | `bank [item]` / `bank -[item]` | Deposit / withdraw at a banker. |
-| `2g 50s` | The bot hands you that much gold. |
+| `2g 50s` | Supposed to make the bot hand you that much gold — **broken on this fork's current build**: the bot opens the trade, adds the gold, then rejects its own trade. Field-tested repeatedly (any amount). Use a GM instead: `.modify money <copper>` on yourself (10000 copper = 1g). |
 
 **Trading with a bot** is just the normal trade window: target the bot, right-click its
 portrait → Trade (or drag an item onto it). The bot presents and accepts. Field-tested

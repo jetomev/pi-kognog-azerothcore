@@ -1,4 +1,8 @@
-# <img src="assets/icons/the-guide.png" class="nk-title-icon" alt=""> Optional — Adding modules
+# <img src="assets/icons/the-guide.png" class="nk-title-icon" alt=""> Optional — Server: modules + add-ons
+
+**This page is the server half of the Optionals** — modules compiled into the
+worldserver on the Pi. Its sibling, [Client: mods + add-ons](optional-client-addons.md),
+covers everything installed on a player's computer.
 
 **This is an optional section, done *after* the base server works.** The base guide
 (Chapters 00–10) gets you a running Playerbots realm and nothing else. Once that is

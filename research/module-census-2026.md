@@ -47,7 +47,7 @@ mod-individual-progression (the big one — changes the whole realm's shape) ·
 mod-ollama-chat (the fun one)
 
 **Client starter kit (per family member):**
-PlayerbotsPanel · pfQuest · AtlasLoot + Atlas · DBM-Warmane · Skada · GTFO ·
+UnBot (not PlayerbotsPanel — census correction 2026-08-02) · pfQuest · AtlasLoot + Atlas · DBM-Warmane · Skada · GTFO ·
 Bagnon · Postal · Altoholic · TurnIn · DalaranAH · LAA 4GB flag (before any HD pack)
 
 ---
@@ -179,7 +179,7 @@ Bagnon · Postal · Altoholic · TurnIn · DalaranAH · LAA 4GB flag (before any
 | ZhengPeiRu21/mod-playerbots | module | server | dormant (2024-06) | — | no | 2 | Her IP-compat bot fork; superseded — modern IP works on the main fork | Linux | https://github.com/ZhengPeiRu21/mod-playerbots |
 | DustinHendrickson/mod-ollama-chat | module | server | yes | needs Ollama endpoint (off-Pi) | yes (fun, wave 2) | 4 | 110★ — bots talk via local LLM with personalities; host Ollama on the desktop, point across LAN; the family will not stop laughing | Linux (+LAN LLM box) | https://github.com/DustinHendrickson/mod-ollama-chat |
 | NathanHandley/mod-ah-bot-plus | module | server | yes | org mod-ah-bot, araxiaonline/mod-auctionator (only one AH bot) | yes (wave 1 — replaces our mod-ah-bot plan) | 5 | 109★ much-improved AH bot: config-driven, multi-character, GM commands, documented playerbots coexistence (use a regular non-bot char as the AH character); needs AC ≥ 3f46e05 — verify fork has it | Linux | https://github.com/NathanHandley/mod-ah-bot-plus |
-| liyunfan1223/unbot-addon | mod (addon) | client | frozen-but-works | — | no (use PlayerbotsPanel) | 3 | The fork's own control addon (94★); Chinese-first UI; superseded for us by PlayerbotsPanel | Win+Wine | https://github.com/liyunfan1223/unbot-addon |
+| liyunfan1223/unbot-addon | mod (addon) | client | frozen-but-works | — | **yes — installed 2026-08-01** (PlayerbotsPanel was a census error: early-alpha, nonfunctional) | 4 | The fork's own control addon (94★); Chinese-first UI; superseded for us by PlayerbotsPanel | Win+Wine | https://github.com/liyunfan1223/unbot-addon |
 | ZhengPeiRu21/mod-challenge-modes | module | server | yes | AnchyDev/HardMode (overlap) | maybe | 4 | 67★ hardcore/ironman/self-found toggles per character — great "second lap" content; proven in the big playerbots repack | Linux | https://github.com/ZhengPeiRu21/mod-challenge-modes |
 | DustinHendrickson/mod-player-bot-level-brackets | module | server | yes | — | yes (wave 1) | 5 | 57★ keeps bot population spread across level brackets — directly fixes the "everyone's at 80, lowbie zones empty" drift on our ~40-bot realm | Linux | https://github.com/DustinHendrickson/mod-player-bot-level-brackets |
 | heyitsbench/mod-arac | module | server | yes | berubejd/mod-uac (pick one); needs client patch on EVERY family client | no | 3 | 57★ all-races-all-classes; the client-patch distribution burden decides against it — see mod-uac for patch-free | Linux + client patch | https://github.com/heyitsbench/mod-arac |
@@ -265,8 +265,8 @@ Only helper apps (updater, LAA flagger) are Windows programs. Patches are MPQ fi
 
 | Name | Type | For | Maintained | Incompatible with | Rec. | ★ | General Comments | OS | Link |
 |---|---|---|---|---|---|---|---|---|---|
-| PlayerbotsPanel | mod (addon) | client | yes | — | yes | 5 | English GUI for OUR playerbots fork (summon/gear/strategies/formations) — the family's bot remote control | Win+Wine | https://github.com/azcguy/PlayerbotsPanel |
-| unbot-addon | mod (addon) | client | frozen | PlayerbotsPanel (redundant) | no | 3 | Fork-author's own panel; Chinese-first UI; superseded for us | Win+Wine | https://github.com/liyunfan1223/unbot-addon |
+| PlayerbotsPanel | mod (addon) | client | alpha | — | **no — CORRECTED 2026-08-02** | 1 | Census error, caught at install time: its own README says EARLY ALPHA / DOESN'T WORK and it requires a Broker + emulator companion stack. Nonfunctional as shipped; UnBot took its slot in the kit | Win+Wine | https://github.com/azcguy/PlayerbotsPanel |
+| unbot-addon | mod (addon) | client | frozen-but-works | — | **yes — installed 2026-08-01** | 4 | Fork-author's own panel (UnBot + YssBossLoot); took PlayerbotsPanel's slot after that census error; `/ub` in game, works | Win+Wine | https://github.com/liyunfan1223/unbot-addon |
 | TurnIn | mod (addon) | client | frozen-but-works | — | yes | 4 | Auto accept/turn-in quests — transformative when marching a bot party through quest hubs | Win+Wine | https://github.com/NoM0Re/WoW-3.3.5a-Addons/raw/main/src/Addons/TurnIn-2.1.zip |
 | DalaranAH | mod (addon) | client | yes | — | yes | 4 | One-click AH-NPC access, built for AH-bot realms — pairs with mod-ah-bot-plus | Win+Wine | https://github.com/NoM0Re/DalaranAH/releases/latest/download/DalaranAH.zip |
 | pfQuest (wotlk) | mod (addon) | client | yes | run ONE quest helper | yes | 5 | THE maintained quest helper (shagu, WotLK releases); NOT the "turtle" variant (1.12-only) | Win+Wine | https://github.com/shagu/pfQuest |

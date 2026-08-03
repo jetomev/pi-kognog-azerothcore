@@ -52,7 +52,8 @@ Every module follows the same shape. This is the reusable recipe:
    **Checkpoint:** before building, find the `Modules configuration (static)` list in
    the cmake output and confirm your new module's name appears in it. cmake also prints
    a `Modules config list` naming each module's config file — note it; some modules
-   (e.g. `mod-junk-to-gold`) ship none and are simply always-on.
+   ship none and are simply **always-on** — which also means the only off switch is a
+   rebuild (see the junk-to-gold story below for why that matters).
 
 3. **Compile.** The realm can keep running during this — you're building a new binary
    next to the live one:
@@ -89,19 +90,23 @@ Every module follows the same shape. This is the reusable recipe:
 Each module added below gets its exact repo, config, and any gotchas documented *as we
 add it and test it* — not before.
 
-## ✅ Installed on this realm — Wave 1, Batch A (2026-08-01)
+## ✅ Installed on this realm — Wave 1 (2026-08-01/02)
 
-Six modules, chosen from the [full ecosystem census](#the-census) below, installed
-together in one build using the pattern above and verified live. All six are server-side
-only — nothing to install on any player's client — and none conflict with each other or
-with Playerbots.
+Batch A — six modules chosen from the [full ecosystem census](#the-census) below —
+installed together in one build using the pattern above and verified live on
+2026-08-01. One day of family play later, one of the six (`mod-junk-to-gold`) was
+**removed** for eating quest items, and the investigation it triggered brought in
+`mod-quest-loot-party` — the full story is below and in
+[TROUBLESHOOTING](TROUBLESHOOTING.md#a-collect-x-items-quest-never-advances--the-drops-dont-exist).
+The current roster of six: all server-side only — nothing to install on any player's
+client — and none conflict with each other or with Playerbots.
 
 | Module | What it does / why we added it |
 |---|---|
 | [`mod-learn-spells`](https://github.com/azerothcore/mod-learn-spells) | Auto-learns class spells on level-up. Kills the "back to the trainer every 2 levels" chore — the #1 friction for casual family leveling. **Verified:** new spells appear on level-up, no trainer visit. |
 | [`mod-solo-lfg`](https://github.com/azerothcore/mod-solo-lfg) | Lets a solo player use the Dungeon Finder. **Verified:** solo queue accepted where the stock client refuses. |
 | [`mod-duel-reset`](https://github.com/azerothcore/mod-duel-reset) | Resets cooldowns/HP/mana around duels — fair, endless family duels. |
-| [`mod-junk-to-gold`](https://github.com/noisiver/mod-junk-to-gold) | Gray junk converts to coin on loot. No config file — always on once built. **Verified:** vendor trash arrives as money. |
+| [`mod-quest-loot-party`](https://github.com/pangolp/mod-quest-loot-party) | Every party member gets their **own copy** of quest item drops. Without it, quest items are dealt round-robin to ONE member per corpse — and since bots share your quests, a 5-member bot party starves your counters. **Verified:** armbands for everyone, bots in party. (Added 2026-08-02.) |
 | [`mod-player-bot-level-brackets`](https://github.com/DustinHendrickson/mod-player-bot-level-brackets) | Keeps the random-bot population spread across level ranges instead of drifting to 80 — the world stays alive at every level. Applied its own SQL on first boot (`bot_level_brackets_guild_tracker`). Effect is observed over days, not minutes. |
 | [`mod-rndbot-sync`](https://github.com/Yuof/mod-rndbot-sync) | Caps bot max level at the highest *real* player online — the bot world grows **with** the family instead of ahead of it. Also observational. |
 
@@ -115,6 +120,44 @@ Install notes from the live run:
   `World Initialized In 0 Minutes 24 Seconds`, no errors.
 - Configs were activated with defaults; tuning (bracket percentages, sync behavior)
   comes after observing the realm for a few days.
+
+### ⚠️ Removed: `mod-junk-to-gold` (installed 2026-08-01, removed 2026-08-02)
+
+Batch A originally included [`mod-junk-to-gold`](https://github.com/noisiver/mod-junk-to-gold)
+— gray junk converts to coins on loot, a beloved QoL. It lasted one day. Its entire
+logic is one hook: *any* Poor-quality item a player loots is destroyed and paid out at
+vendor price — **with no exception for quest items**. Gray quest objectives and gray
+quest-starter drops (its own tracker's example: Noboru's Cudgel) get vaporized before
+you ever see them, which on a questing family realm is disqualifying. A community PR
+adding exactly the right exceptions was rejected by the maintainer ("this doesn't match
+my vision for this module"), so there is nothing to wait for. Removal took 20 minutes
+using the reverse pattern below.
+
+**The lesson, now a census rule: a module that touches loot must respect quests** — and
+an always-on module (no config) can only be turned off by rebuilding, so audit those
+extra hard before compiling them in.
+
+## Removing a module (the reverse pattern)
+
+Field-tested on the junk-to-gold removal. It's the install pattern run backwards, and
+steps 1–3 happen with the realm **up**:
+
+1. **Delete the module's source folder:**
+   ```
+   rm -rf /mnt/nvme/azerothcore-wotlk/modules/mod-<name>
+   ```
+2. **Re-run cmake** (the exact block from the pattern above). **Checkpoint:** the
+   module is *gone* from the `Modules configuration (static)` list.
+3. **`make -j4`** — worldserver relinks without it.
+4. **The swap window** — stop, `make install`, start (same as installing). If the
+   module had a config, its `.conf`/`.conf.dist` in `env/dist/etc/modules/` can be
+   deleted too (harmless to leave — nothing reads them anymore).
+5. **Verify:** `World Initialized`, no errors, and the module's behavior is gone in
+   game.
+
+One honest caveat: any SQL a module already applied stays in the database. For most
+modules that's inert leftovers; if a module rewrote gameplay data, check its README for
+a revert script before assuming removal restored the status quo.
 
 ## The census
 
@@ -187,8 +230,12 @@ Worth knowing about, from outside the original shortlist:
 
 ## Status
 
-**Wave 1 Batch A (6 modules) installed and verified live 2026-08-01** — see the
-Installed section above for the tested procedure. Next: **Batch B, `mod-ah-bot-plus`**
-(the auction house), then the wave 2 candidates from the census. For the **client-side**
+**Wave 1 complete (2026-08-01/02): six modules live** — Batch A's six installed and
+verified, then one removed (`mod-junk-to-gold`, quest-eater) and one added
+(`mod-quest-loot-party`, the bot-party quest fix) after a day of real family play.
+Install, removal, and the loot-mechanic detective story are all documented above and in
+[TROUBLESHOOTING](TROUBLESHOOTING.md#a-collect-x-items-quest-never-advances--the-drops-dont-exist).
+Next: **Batch B, `mod-ah-bot-plus`** (the auction house), then the wave 2 candidates
+from the census. For the **client-side**
 half of this story — bot control panels, quest helpers, DBM — see
 [Client add-ons](optional-client-addons.md).

@@ -640,6 +640,54 @@ advancing while you keep killing the same mobs.
 
 ---
 
+### A "collect X items" quest never advances — the drops don't exist
+
+**Symptom:** A quest asks you to collect items from mob corpses (e.g. *Riverpaw Gnoll
+Bounty*, 10 Painted Gnoll Armbands). You kill the right mobs for days — solo, in a bot
+party, either way — and the item **never drops once**. Feels identical to "kills aren't
+counting."
+
+**Cause:** We hit *two* stacked causes, and the debugging order matters:
+
+1. **A loot-touching module was eating gray quest items.** `mod-junk-to-gold` converts
+   every Poor-quality item to coins at loot time — *including* gray quest objectives and
+   gray quest-starter drops (its tracker knows: issue #7; the fix PR #9 was rejected by
+   the maintainer). Any module that hooks loot without a quest-item exception does this.
+2. **Quest items are always group-loot** — even under free-for-all. The server deals each
+   quest drop to **one** eligible party member, round-robin. Bots share your quests, so
+   in a 5-member bot party ~4 of every 5 drops are dealt to bots — and a drop dealt to a
+   bot that never loots it despawns with the corpse. It never existed anywhere.
+
+**Diagnosis path** (the database never lies):
+
+```
+-- is the item even supposed to drop from what you're killing?
+SELECT clt.Entry, ct.name, clt.Chance, clt.QuestRequired
+FROM acore_world.creature_loot_template clt
+JOIN acore_world.creature_template ct ON ct.lootid = clt.Entry
+WHERE clt.Item = <item_entry>;
+
+-- does ANYONE on the realm hold the item?
+SELECT c.name, COUNT(*) FROM acore_characters.item_instance ii
+JOIN acore_characters.characters c ON c.guid = ii.owner_guid
+WHERE ii.itemEntry = <item_entry> GROUP BY c.name;
+```
+
+If the loot table is fine but the realm-wide count is **zero**, the drops are being
+destroyed or dealt-and-despawned. Confirm the group mechanic by leaving the party and
+killing a few droppers solo — the items appear immediately.
+
+**Fix:** remove the loot-eating module (see [Removing a module](optional-modules.md#removing-a-module-the-reverse-pattern)),
+and install [`mod-quest-loot-party`](https://github.com/pangolp/mod-quest-loot-party) —
+every party member gets their own copy of quest drops, so a bot party stops competing
+with you. Both verified live on this realm, 2026-08-02. Beware: only the *exact* creatures
+in the loot table drop the item — Elwynn's Riverpaw **Mongrels** share the name and drop
+nothing (authentic 2004 cruelty).
+
+**ARM64-specific:** no
+
+---
+
 <a id="chapter-10--keeping-it-alive"></a>
 
 ## Chapter 10 — Keeping it alive

@@ -123,7 +123,11 @@ altbots never do** — altbots wear exactly what you give them, which is the poi
 ## Quests
 
 Bots **mirror you automatically**: accept when you accept, turn in when you turn in, and
-they share the same mob-tag credit rules you do. On top of that:
+they share the same mob-tag credit rules you do. One mechanic to know: quest item drops
+are always dealt to **one** party member per corpse — with a bot party that starves your
+collect-quests, which is why this realm runs
+[`mod-quest-loot-party`](optional-modules.md) (everyone gets their own copy). On top of
+that:
 
 | Command | What it does |
 |---|---|

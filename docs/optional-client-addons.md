@@ -40,7 +40,7 @@ one at a time, checking each works before the next — same rule as the server s
 > next. When something breaks after 11 installs at once, you learn nothing; one at a
 > time, the culprit identifies itself.
 
-## Part 1 — The installed kit (11 add-ons)
+## Part 1 — The installed kit (13 add-ons)
 
 The order below is deliberate: the first three change how you *play*, the rest are
 comfort. Stop wherever you like — every one is independent.
@@ -162,7 +162,45 @@ Comes with YssBossLoot as a bundled helper.
 - **Check:** `/ub` toggles the bot panel. Closed it by accident mid-session? `/ub`
   brings it back.
 
-**Final count:** with everything above installed, `Interface\AddOns\` holds **79**
+### 12. Immersion — cinematic quest dialogue
+
+**What/why:** replaces the flat quest-text parchment with a face-to-face view — the
+NPC's animated portrait talks you through the quest, line by line, like a modern RPG
+conversation. Pairs with AI VoiceOver below (same porter made both): text you can
+*hear*, from a face you can *see*.
+
+- **Download:** [Immersion.zip](https://github.com/s0h2x/Immersion-WotLK/releases/download/1.4.14/Immersion.zip)
+- **Install:** unzip → move **`Immersion`** into `AddOns\`. (1 folder)
+- **Check:** talk to any quest giver — if you get the portrait dialogue view instead
+  of the old text wall, it's alive. Quest markers (pfQuest) keep working as before.
+
+### 13. AI VoiceOver — quest givers that speak
+
+**What/why:** AI-generated voices for NPC quest and gossip text, matched to each
+NPC's race and gender. With Immersion installed, the voice plays over the animated
+portrait — the closest a 2008 client gets to voiced questing. Two pieces: the add-on,
+and the voice data (big!).
+
+- **Download 1 — the add-on:**
+  [AI_VoiceOver-WoW_3.3.5-v1.4.5.zip](https://github.com/mrthinger/wow-voiceover/releases/download/v1.4.5/AI_VoiceOver-WoW_3.3.5-v1.4.5.zip)
+  (from the official project's releases — grab the `3.3.5` build, not the 1.12 one)
+- **Download 2 — the voices:**
+  [AI_VoiceOverData_Vanilla-v1.0.0.zip](https://github.com/mrthinger/wow-voiceover/releases/download/v1.3.1/AI_VoiceOverData_Vanilla-v1.0.0.zip)
+  — **1.1 GB**, so start it and go make coffee. On the home LAN, ask for the copy
+  instead of re-downloading.
+- **Install:** unzip both → move **`AI_VoiceOver`** and **`AI_VoiceOverData_Vanilla`**
+  into `AddOns\`. (2 folders; the data one is ~1.2 GB with ~9,500 sound files — that's
+  normal.)
+- **Check:** **restart the game fully** (not just `/reload`), then talk to a quest
+  giver in a classic zone — you should *hear* the quest, with a small playback bar.
+
+> 💡 **Good to know:** the voices cover **classic-zone quests** (levels 1–60 content) —
+> exactly where this realm's questing lives right now. Outland/Northrend voice packs
+> exist in the community and get evaluated when someone outlevels Azeroth. One quirk:
+> the 3.3.5a client can't always cut a voice off mid-line (it predates the API that
+> allows it) — cosmetic, harmless.
+
+**Final count:** with everything above installed, `Interface\AddOns\` holds **82**
 non-Blizzard folders. Character-select's AddOns button should list them all.
 
 ## Part 2 — HD graphics: the WoD/Legion models pack
@@ -276,7 +314,6 @@ actually run them.
 | Questie | The other quest helper — explicitly matched to AzerothCore data. We chose pfQuest; if it ever disappoints, this is the replacement | [Aldori15/Questie](https://github.com/Aldori15/Questie) |
 | Leatrix Plus | Automation suite: auto-sell junk, auto-repair, speed tweaks | [Sattva-108/Leatrix_Plus](https://github.com/Sattva-108/Leatrix_Plus) |
 | WeakAuras | Graphical trigger framework: procs, cooldowns, custom displays | [Bunny67/WeakAuras-WotLK](https://github.com/Bunny67/WeakAuras-WotLK) |
-| Immersion | Retail-style animated quest dialogue | [s0h2x/Immersion-WotLK](https://github.com/s0h2x/Immersion-WotLK) |
 | GSE | One-button rotation macros | [cerberuscx/GSE-WotLK-3.3.5a](https://github.com/cerberuscx/GSE-WotLK-3.3.5a) |
 | ElvUI | Full UI replacement | [ElvUI-WotLK/ElvUI](https://github.com/ElvUI-WotLK/ElvUI) |
 | Auctionator / DalaranAH | Saner auction-house UI — becomes relevant once the server's AH bot (Batch B) populates the auction house | [jejkas/Auctionator](https://github.com/jejkas/Auctionator) · [NoM0Re/DalaranAH](https://github.com/NoM0Re/DalaranAH) |
@@ -287,7 +324,8 @@ kit's downloads above come straight from it).
 
 ## Status
 
-**The 11-add-on kit + the HD models pack: installed and play-tested on the reference
-client, August 2026.** Rule unchanged: what's written here is what actually happened.
+**The 13-add-on kit + the HD models pack: installed and play-tested on the reference
+client, August 2026.** (Latest additions: Immersion + AI VoiceOver — the "immersion
+pair" — promoted from the explore list below on 2026-08-05.) Rule unchanged: what's written here is what actually happened.
 For the server half — modules compiled into the worldserver — see
 [Server: modules + add-ons](optional-modules.md).

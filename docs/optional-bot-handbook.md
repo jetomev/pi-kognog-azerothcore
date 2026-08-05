@@ -162,6 +162,12 @@ Hard-won, on the actual Pi party:
   it later from your friends list — it arrives as itself, real level and real gear.
 - **`/p follow` fixes 90% of weirdness.** Bots holding position at the last corpse, bots
   lagging a zone behind — regroup and carry on. For the other 10%, `reset botAI`.
+- **Quest with 4 bots — never invite a 5th while questing.** A party caps at 5 members
+  *including you*; a 6th invite silently converts the group to a **raid**, and normal
+  quests stop counting kills in raids (2004 rule, still enforced — collect objectives
+  keep ticking, which hides the problem). The raid flag survives shrinking back to 5;
+  only a full disband clears it. Symptom + fix live in the
+  [kill-quest troubleshooting entry](TROUBLESHOOTING.md#a-kill-x-creatures-quest-stops-counting).
 
 ---
 

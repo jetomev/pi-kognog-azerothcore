@@ -621,20 +621,36 @@ auto-assist by default; `/p stay` parks them, `/p attack` focus-fires your targe
 **Symptom:** A kill-quest counter climbs for the first couple of kills, then stops
 advancing while you keep killing the same mobs.
 
-**Cause:** Usually one of two things — and they are **not** bugs:
+**Cause:** Usually one of three things — and they are **not** bugs:
 1. **The quest is already done.** Open the quest log (`L`); if the objective reads `X/X`,
    it finished and simply stopped at the cap. Turn it in.
 2. **A bot is stealing the tag.** In WoW you only get kill credit for a mob your group
    **tagged** (dealt first damage to) *and* that you were **near** when it died. `addclass`
    bots are fast and aggressive; if a bot tags and kills a mob while you're out of range,
    the bot gets the tag and you get no credit.
+3. **Your group secretly became a RAID.** Field-diagnosed live on this realm (2026-08-05,
+   "The Killing Fields", counter frozen at 0/20 on the correct mob): a party holds **5
+   members including you** — inviting a 6th (one bot too many during a roster shuffle)
+   silently converts the group to a raid, and by a 2004 rule the game keeps faithfully,
+   **normal quests give no kill credit in raid groups** (the check is right in the core:
+   `PlayerQuest.cpp`, `KilledMonsterCredit` skips every non-raid-allowed quest when
+   `isRaidGroup()`). Two traps inside the trap: the raid flag **does not clear itself**
+   when you drop back to 5 or fewer — it stays until the group is disbanded — and
+   **collect quests keep counting** (the item path has no raid check), so the group looks
+   half-healthy, which is exactly what makes this one maddening.
 
 **Fix:**
 - Check the quest log first — most "it stopped" reports are case 1 (already complete).
 - If it's case 2: **tag the mob yourself** (one hit/spell/shot before the bots pile on), or
   `/p stay` to park the party, pull the mob, then `/p attack` so *you* stay the tagger.
+- If your group frames look like a compact **grid** instead of the normal party list (or
+  the social panel offers "Convert to Party"), it's case 3: **dismiss the whole party**
+  (`.playerbots bot remove *`), then re-summon **at most 4 bots**. Credit resumes
+  immediately — verified live, same session.
 - Also confirm the mobs are the **exact** creature the quest names (some zones have two
   near-identical variants; only one counts).
+
+**Rule of thumb:** *quest with 4 bots — never invite a 5th while questing.*
 
 **ARM64-specific:** no
 

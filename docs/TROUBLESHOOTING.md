@@ -704,6 +704,69 @@ nothing (authentic 2004 cruelty).
 
 ---
 
+### The quest item is in my bag but the counter says 0
+
+**Symptom:** You loot a collect-quest item — it's visibly sitting in your bags — but the
+quest tracker still reads `0/X`. Often noticed in a bot party running
+[`mod-quest-loot-party`](optional-modules.md), where the bots collect their copies fast
+and loudly, which makes the frozen counter *feel* like the bots stole your credit.
+(Field-diagnosed live 2026-08-07, *Westfall Stew* / Murloc Eyes — two players hit it
+independently the same evening.)
+
+**Cause:** the client is lying, not the server. AzerothCore doesn't push an
+"item-count updated" packet for collect objectives — the 3.3.5 client is expected to
+count quest items from **its own bags**, and that display refresh sometimes goes stale
+(pfQuest's tracker adds a second cache on top). Server-side, every looted item passes
+through `ItemAddedQuestCheck` unconditionally — no group or raid check exists on the
+item path — so if the item reached your bag by looting, the server counted it.
+
+Two look-alikes to rule out first:
+- **Bots "taking" the item is normal and harmless.** Under `mod-quest-loot-party`, every
+  member loots their *own* copy — a bot's loot line doesn't consume yours. The module is
+  generous to a fault: even bots **without the quest** collect copies (its hook
+  free-for-alls every white-quality quest item to the whole party). They just haul junk;
+  `/p s *` at a vendor clears their pockets.
+- **Your copy comes only from corpses YOU loot.** The bots finishing their counters does
+  nothing for yours — sweep the bodies yourself before they despawn.
+
+**Diagnosis path** (the database never lies — read the server's ledger directly):
+
+```
+-- which quest requires the item, and which slot is it in?
+SELECT ID, LogTitle, RequiredItemId1, RequiredItemId2, RequiredItemId3
+FROM acore_world.quest_template
+WHERE RequiredItemId1 = <item_entry> OR RequiredItemId2 = <item_entry>
+   OR RequiredItemId3 = <item_entry>;
+
+-- the server-truth counter (itemcountN matches the RequiredItemIdN slot):
+SELECT c.name, qs.status, qs.itemcount1, qs.itemcount2, qs.itemcount3
+FROM acore_characters.character_queststatus qs
+JOIN acore_characters.characters c ON c.guid = qs.guid
+WHERE qs.quest = <quest_id>;
+```
+
+If the ledger shows the right count while your screen shows 0, it's purely a display
+problem. If the ledger *also* says 0 while the item sits in your bag, abandon and
+re-accept the quest — on accept the server **recounts required items already in your
+bags** and credits them.
+
+**Fix** (escalating, first one usually does it):
+1. **`/reload`** — rebuilds the UI and forces a fresh bag-scan (verified live: counter
+   corrected itself immediately).
+2. **`/db query`** — pfQuest's server-resync (same trick as the ghost quest markers).
+3. **Full relog** — the server re-sends complete quest status on login.
+4. **Abandon + re-accept** — the server-side recount described above.
+
+Bonus isolation trick: press `L` and compare the **default Blizzard quest log** against
+pfQuest's tracker. Default log right + pfQuest wrong = pfQuest's cache (note: shagu's
+pfQuest repo was archived mid-2026; the maintained fork is
+[Bennylavaa/pfQuest-wotlk](https://github.com/Bennylavaa/pfQuest-wotlk)). Both wrong =
+the client bag-scan, and `/reload` is the cure.
+
+**ARM64-specific:** no
+
+---
+
 <a id="chapter-10--keeping-it-alive"></a>
 
 ## Chapter 10 — Keeping it alive

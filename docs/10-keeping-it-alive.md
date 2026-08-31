@@ -14,8 +14,8 @@ failure, a **nightly backup** protects the databases (with a *proven* restore), 
 
 Three independent pieces of durability, done in order:
 
-1. **systemd services** for `authserver` and `worldserver` — auto-start, auto-restart, log
-   to the journal.
+1. **systemd services** for `authserver` and `worldserver` — auto-start on boot,
+   auto-restart on failure, come back with MySQL, log to the journal.
 2. **Backups** — a nightly `mysqldump` of all four databases, timestamped and pruned, plus
    a restore test to prove they work.
 3. **Move MySQL to the NVMe** — the datadir move deferred back in Chapter 03.
@@ -146,7 +146,64 @@ systemctl is-active azerothcore-authserver azerothcore-worldserver   # active, a
 ss -tlnp | grep -E ':3724|:8085'                                     # both LISTEN
 ```
 
-### 5. (Optional) silence the priority-class warning
+### 5. Survive a MySQL restart
+
+The reboot test proves the realm returns when the **whole Pi** restarts. It does not prove
+what happens when **only MySQL** restarts — and that is the case you will actually meet,
+because Ubuntu ships a MySQL security update roughly once a month, and installing one
+restarts the database.
+
+Both units declare `Requires=mysql.service`. That is correct — they must never run without a
+database. But `Requires=` only carries the **stop** across. MySQL going down takes the realm
+down with it; MySQL coming back does **not** bring the realm back. The realm sits there
+`inactive`, no error in the journal, nothing obviously wrong, until someone tries to log in
+and can't.
+
+Give MySQL the missing half — a drop-in that pulls the realm up whenever MySQL starts:
+
+```
+sudo mkdir -p /etc/systemd/system/mysql.service.d
+sudo tee /etc/systemd/system/mysql.service.d/azerothcore.conf > /dev/null <<'EOF'
+[Unit]
+Wants=azerothcore-authserver.service azerothcore-worldserver.service
+EOF
+sudo systemctl daemon-reload
+```
+
+Confirm systemd took it — both service names should print:
+
+```
+systemctl show mysql -p Wants --value | tr ' ' '\n' | grep azerothcore
+```
+
+Now prove it the same way you proved the reboot: **restart MySQL on purpose**, while nobody
+is playing (it takes the realm down for about a minute).
+
+```
+sudo systemctl restart mysql
+```
+
+Wait ~1 minute, then check **without touching anything**:
+
+```
+systemctl is-active azerothcore-authserver azerothcore-worldserver   # active, active
+ss -tlnp | grep -E ':3724|:8085'                                     # both LISTEN
+```
+
+The journal tells the whole story — the realm stopping with MySQL, then starting after it:
+
+```
+sudo journalctl -u azerothcore-worldserver -n 5 --no-pager
+```
+
+- **`Wants=` is a start-time pull**, the mirror of what `Requires=` already does for stops.
+  Together they make the pairing symmetric: MySQL down → realm down, MySQL up → realm up.
+- **A drop-in, not an edit.** Ubuntu's own `mysql.service` is untouched, so a future MySQL
+  package upgrade cannot quietly undo this.
+- **`Restart=on-failure` cannot cover this**, and shouldn't: the realm exits cleanly with
+  status 0 because systemd asked it to stop. There is no failure to restart from.
+
+### 6. (Optional) silence the priority-class warning
 
 `worldserver` logs `Can't set process priority class` because a normal user can't raise
 scheduling priority. Grant just that one capability with a drop-in:
@@ -167,7 +224,7 @@ After the restart the log shows `Process priority class set to -15` instead of t
 
 ## Part B — backups
 
-### 6. The backup script
+### 7. The backup script
 
 Dumps all four databases to the **NVMe** (7-day retention), then places a second copy of
 the three **irreplaceable** databases on the **microSD** (3-day retention) — so a single
@@ -240,7 +297,7 @@ ls -lh /var/backups/acore-mysql/      # exactly three files, ~20 MB total
 > optional chapter: **[Off-box backups](optional-offbox-backups.md)** — do it before any
 > wipe or reinstall.
 
-### 7. Run it nightly
+### 8. Run it nightly
 
 ```
 sudo tee /etc/systemd/system/acore-backup.service > /dev/null <<'EOF'
@@ -278,7 +335,7 @@ systemctl list-timers acore-backup.timer --no-pager   # NEXT shows the coming 04
 **`Persistent=true`** means a night the Pi is off runs the backup at next boot rather than
 skipping it.
 
-### 8. Restore test — the step nobody should skip
+### 9. Restore test — the step nobody should skip
 
 A backup you've never restored is a hope, not a backup. Prove one loads — *safely*, into a
 throwaway database, so the live realm is never touched. (Each dump is a single database with
@@ -303,7 +360,7 @@ The riskiest step, made safe by two nets: the verified backups above, and keepin
 datadir intact until the new one is confirmed. The one Ubuntu trap is **AppArmor**, which
 confines `mysqld` to `/var/lib/mysql` and will refuse the new path until told otherwise.
 
-### 9. Quiesce and copy
+### 10. Quiesce and copy
 
 ```
 sudo systemctl stop azerothcore-worldserver azerothcore-authserver
@@ -318,7 +375,7 @@ sudo ls -ld /mnt/nvme/mysql                    # owned mysql:mysql
 `rsync -aHAX` preserves ownership, permissions, hardlinks, ACLs, and xattrs — MySQL is picky
 about all of them. The original is untouched (your rollback).
 
-### 10. Point MySQL + AppArmor at the new path
+### 11. Point MySQL + AppArmor at the new path
 
 Set the datadir with a drop-in read **last** (so it wins, no editing the main config):
 
@@ -344,7 +401,7 @@ sudo apparmor_parser -r /etc/apparmor.d/usr.sbin.mysqld
 > fail. If it does fail to start, `sudo journalctl -u mysql -n 20 --no-pager` and
 > `sudo dmesg | grep -i apparmor` will show a `DENIED` line for `/mnt/nvme/mysql`.
 
-### 11. Start, verify, and prove it by playing
+### 12. Start, verify, and prove it by playing
 
 ```
 sudo systemctl start mysql
@@ -357,7 +414,7 @@ Give worldserver its minute, then **log in from your client** and confirm your c
 there — reading from the new disk. Create a character, make bots, play, log off, and check
 it all persisted. That in-game confirmation is the real proof.
 
-### 12. Reclaim the microSD
+### 13. Reclaim the microSD
 
 Once you're in-world from the NVMe, rename the old datadir (kept as an instant rollback):
 
@@ -378,6 +435,8 @@ Chapter 10 is done when:
 
 - both servers are systemd services (`is-active` → `active`), and the realm **survives a
   reboot with no manual start**,
+- the realm also **survives a MySQL restart with no manual start** (Step 5) — tested, not
+  assumed,
 - the nightly backup timer is scheduled and a **restore test's row counts matched**,
 - `SELECT @@datadir` reports `/mnt/nvme/mysql/`, and you've **logged in and played** from
   the NVMe-hosted database.
@@ -395,3 +454,7 @@ the microSD holds only the OS.
   trivial: revert `zz-datadir.cnf` (or point it back at `/var/lib/mysql`) and restart.
 - **Services won't bind the ports** — a hand-started server is still holding them; find it
   with `pgrep -a worldserver` / `pgrep -a authserver` and stop it.
+- **The realm is `inactive` after an update and nothing looks broken** — MySQL restarted and
+  nothing pulled the realm back up. Start it now with `sudo systemctl start
+  azerothcore-authserver azerothcore-worldserver`, then install the drop-in in Step 5 so it
+  cannot happen again.

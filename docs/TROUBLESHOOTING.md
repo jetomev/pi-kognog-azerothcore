@@ -834,6 +834,63 @@ you've confirmed the move.
 
 ---
 
+### The realm is down after an update, and nothing looks broken
+
+**Symptom:** Nobody can log in. The services simply are not running, there is no error, and
+the database is fine:
+
+```
+$ systemctl is-active azerothcore-authserver azerothcore-worldserver
+inactive
+inactive
+$ systemctl is-active mysql
+active
+```
+
+The journal shows an orderly shutdown, not a crash — and MySQL returning alone:
+
+```
+systemd[1]: Stopping azerothcore-worldserver.service ...
+systemd[1]: azerothcore-worldserver.service: Deactivated successfully.
+systemd[1]: Stopped azerothcore-worldserver.service
+systemd[1]: Stopping mysql.service ...
+systemd[1]: Started mysql.service            <- MySQL came back; the realm did not
+```
+
+**Cause:** The realm units declare `Requires=mysql.service`. `Requires=` propagates a
+**stop** but not a **start**: MySQL going down correctly takes the realm with it, and MySQL
+coming back leaves the realm off. Any MySQL restart does this — most often an Ubuntu
+security update to `mysql-server-8.0`, which restarts the database while installing it.
+`Restart=on-failure` does not apply and should not: the realm exited cleanly on request
+(status 0), so there was no failure to restart from.
+
+The reboot test in Chapter 10 does not catch this, because at boot the realm is started
+independently by `WantedBy=multi-user.target`. Only a MySQL restart on a running Pi exposes it.
+
+**Fix:** Get the realm back up now:
+
+```
+sudo systemctl start azerothcore-authserver azerothcore-worldserver
+```
+
+Then make it impossible to recur, with the drop-in from Chapter 10, Step 5:
+
+```
+sudo mkdir -p /etc/systemd/system/mysql.service.d
+sudo tee /etc/systemd/system/mysql.service.d/azerothcore.conf > /dev/null <<'EOF'
+[Unit]
+Wants=azerothcore-authserver.service azerothcore-worldserver.service
+EOF
+sudo systemctl daemon-reload
+```
+
+Test it in the failing direction rather than trusting it — `sudo systemctl restart mysql`,
+wait a minute, then confirm both services are `active` again without you touching them.
+
+**ARM64-specific:** no
+
+---
+
 ## Hit something we did not?
 
 Open an issue with the chapter number, the command you ran, and the **complete** error output. If you already solved it, say so and it gets added here with credit to you.

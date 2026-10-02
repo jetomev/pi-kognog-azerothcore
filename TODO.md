@@ -33,6 +33,7 @@ from the text. What is left is optional chapters, modules and upkeep.
 
 ## Done — most recent first
 
+- [x] **2026-10-02 · `CLAUDE.md`**: the project rules for the AI co-author (names, the "only what was run" rule, who runs what on the Pi, writing and publishing), public on purpose
 - [x] **#3 · 2026-10-01 · On Hyprland the camera spun by itself and menus stopped taking clicks.**
       `play-wotlk.sh` now uses Wine's own Wayland driver on Hyprland only; borderless window plus
       a full-screen window rule. Chapter 08 and a Troubleshooting entry. Played properly, from the

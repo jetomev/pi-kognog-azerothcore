@@ -32,6 +32,14 @@ fi
 export WINEPREFIX="$WINEPREFIX_DIR"
 export WINEDEBUG=-all      # silence Wine's cosmetic fixme/err spam (e.g. "unknown message type 3")
 
+# On Hyprland, use Wine's own Wayland driver instead of XWayland. Through XWayland the camera
+# spins by itself as soon as the mouse turns it (the game's pointer re-centring is not honoured)
+# and the menus stop taking clicks. Wine falls back to Wayland when DISPLAY is unset (tested on Wine 11).
+# Set WOW_X11=1 to force the old way. Other desktops are left as they were.
+if [[ "${XDG_CURRENT_DESKTOP:-}" == *Hyprland* && -n "${WAYLAND_DISPLAY:-}" && -z "${WOW_X11:-}" ]]; then
+    unset DISPLAY
+fi
+
 cd "$GAME_DIR"
 
 # gamemoderun tunes the CPU governor while the game runs; harmless if you didn't install it.

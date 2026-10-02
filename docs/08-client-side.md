@@ -215,6 +215,11 @@ WOW_EXE="Wow.exe"
 export WINEPREFIX="$WINEPREFIX_DIR"
 export WINEDEBUG=-all      # silence Wine's cosmetic fixme/err spam
 
+# Hyprland only: Wine's own Wayland driver, or the camera spins (see Troubleshooting)
+if [[ "${XDG_CURRENT_DESKTOP:-}" == *Hyprland* && -n "${WAYLAND_DISPLAY:-}" && -z "${WOW_X11:-}" ]]; then
+    unset DISPLAY
+fi
+
 cd "$GAME_DIR"
 if command -v gamemoderun >/dev/null 2>&1; then
     exec gamemoderun wine "$WOW_EXE"
@@ -229,7 +234,11 @@ What it bakes in, so a reader never has to remember it:
   `err:msg:process_hardware_message unknown message type 3` lines and the `winediag`
   fixme's — cosmetic, see Troubleshooting),
 - **`gamemoderun`** automatically, *if* it's installed (skipped cleanly if not),
-- launching from the **client folder**.
+- launching from the **client folder**,
+- on **Hyprland**, Wine's own Wayland driver instead of XWayland. Without it the camera
+  spins by itself the moment you turn it with the mouse (see
+  [Troubleshooting](TROUBLESHOOTING.md#the-camera-spins-by-itself-on-hyprland-and-the-menus-stop-taking-clicks)).
+  Plasma, GNOME and the rest are left exactly as before.
 
 The tidiest place for it is **inside the client folder, next to `Wow.exe`**, so everything
 lives in one directory:

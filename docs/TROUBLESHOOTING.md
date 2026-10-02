@@ -519,21 +519,81 @@ expected; leave it.
 password!` — because you no longer remember it.
 
 **Cause:** Recent AzerothCore (and this fork) store passwords as **SRP6 salt+verifier**,
-not a plain hash, so you can't just edit the database. You reset it from the server console.
+not a plain hash, so you can't just type a new password into the database. And once the
+realm runs as a service (Chapter 10), the `worldserver` console is switched off
+(`Console.Enable = 0`), so there is no `AC>` prompt to reset it from either.
 
-**Fix:** At a **live** `worldserver` console (the `AC>` prompt — a foreground terminal, not
-an orphaned background process), set a new one:
+**Fix:** The guide ships [`scripts/reset-password.sh`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/scripts/reset-password.sh).
+It computes a new salt and verifier exactly the way `account set password` does and writes
+them into `acore_auth`, using the database login from `authserver.conf`. **The realm keeps
+running and nobody is disconnected.** Copy it to the Pi once, then run it from your desktop:
 
 ```
-account set password BALIH <newpassword> <newpassword>
+scp scripts/reset-password.sh tpgaming01:
+ssh -t tpgaming01 bash reset-password.sh <account>
 ```
 
-Same value twice; it confirms "The password was changed for account BALIH." If your only
-`worldserver` is orphaned (running but its `screen` shows `Dead`, so no console), stop it
-with `kill <pid>` and restart it in a foreground terminal to get the prompt back. Then save
-the password in a manager this time.
+It asks for the new password twice (nothing shows while you type), reads back what the
+database now holds, and checks the password against it before printing `OK`. If the
+account name is wrong, it changes nothing and lists the accounts that exist. The password
+is never shown, logged or stored. Limits are the game's own: up to 16 characters, and
+upper/lower case don't matter.
+
+*Before Chapter 10* (a `worldserver` running in a foreground terminal), the console works
+too: `account set password BALIH <newpassword> <newpassword>`.
+
+Then save the password in a password manager this time.
 
 **ARM64-specific:** no
+
+---
+
+### The camera spins by itself on Hyprland, and the menus stop taking clicks
+
+**Symptom:** On a **Hyprland** desktop, the game starts fine, but as soon as you turn the
+camera or walk with the mouse, the view spins by itself and won't stop. After that, menu
+buttons (Log Out, Exit Game) don't react to clicks. Windowed mode also looks wrong, and
+full-screen clicks land in the wrong place. On Plasma the same client plays normally.
+
+**Cause:** Two things. (1) Hyprland tiles the game window to a different size from the
+picture the game draws, so clicks miss. (2) To turn the camera, WoW hides the pointer and
+snaps it back to the middle of the window many times a second. Through **XWayland** (how
+Wine normally shows windows on a Wayland desktop) that re-centring isn't honoured, so the
+game keeps reading movement that never happened.
+
+**Fix:** Run Wine's own **Wayland driver** instead of XWayland: start the game with
+`DISPLAY` unset. The guide's [`play-wotlk.sh`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/scripts/play-wotlk.sh)
+does this automatically on Hyprland (and only there; `WOW_X11=1` forces the old way). To
+try it by hand:
+
+```
+env -u DISPLAY ~/Games/ChromieCraft_3.3.5a/play-wotlk.sh
+```
+
+For the window size, play in **borderless window** at your screen's resolution
+(`WTF/Config.wtf`):
+
+```
+SET gxWindow "1"
+SET gxMaximize "1"
+SET gxResolution "2560x1440"
+```
+
+and give Hyprland a rule that opens the game full-screen (Lua config; adjust the monitor
+name to yours):
+
+```lua
+hl.window_rule({
+    name = "wow-fullscreen",
+    match = { class = "(?i)^wow.*\\.exe$" },
+    monitor = "DP-3",
+    fullscreen = true,
+})
+```
+
+Tested on Hyprland 0.56.2, Wine 11.18 (Staging) with DXVK, NVIDIA RTX 3060.
+
+**ARM64-specific:** no (a desktop/Wine issue, unrelated to the server)
 
 ---
 

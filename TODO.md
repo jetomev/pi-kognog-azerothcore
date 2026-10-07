@@ -9,6 +9,9 @@ from the text. What is left is optional chapters, modules and upkeep.
 
 ---
 
+## Just done
+- [x] **2026-10-07 · `play-wotlk.sh` picks Wine's Wayland driver on Sway too** (was Hyprland only). Through XWayland on Sway the pointer escaped the screen while turning the camera (hypeForge F-43, jetomev/forge-suite#25). The script, Chapter 08 and Troubleshooting updated; the live copy in `~/Games/ChromieCraft_3.3.5a/` too. Still to prove: one start from the launcher on Sway, pointer stays in the game
+
 ## Next up
 
 - [ ] **Server Batch B: `mod-ah-bot-plus`** (NathanHandley). Check the fork carries AzerothCore

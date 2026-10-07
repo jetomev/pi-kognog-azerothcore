@@ -548,9 +548,9 @@ Then save the password in a password manager this time.
 
 ---
 
-### The camera spins by itself on Hyprland, and the menus stop taking clicks
+### The camera spins by itself on Sway or Hyprland, and the menus stop taking clicks
 
-**Symptom:** On a **Hyprland** desktop, the game starts fine, but as soon as you turn the
+**Symptom:** On a **Sway** or **Hyprland** desktop, the game starts fine, but as soon as you turn the
 camera or walk with the mouse, the view spins by itself and won't stop. After that, menu
 buttons (Log Out, Exit Game) don't react to clicks. Windowed mode also looks wrong, and
 full-screen clicks land in the wrong place. On Plasma the same client plays normally.
@@ -563,7 +563,7 @@ game keeps reading movement that never happened.
 
 **Fix:** Run Wine's own **Wayland driver** instead of XWayland: start the game with
 `DISPLAY` unset. The guide's [`play-wotlk.sh`](https://github.com/jetomev/pi-kognog-azerothcore/blob/main/scripts/play-wotlk.sh)
-does this automatically on Hyprland (and only there; `WOW_X11=1` forces the old way). To
+does this automatically on Sway and Hyprland (and only there; `WOW_X11=1` forces the old way). To
 try it by hand:
 
 ```
@@ -591,7 +591,7 @@ hl.window_rule({
 })
 ```
 
-Tested on Hyprland 0.56.2, Wine 11.18 (Staging) with DXVK, NVIDIA RTX 3060.
+Tested on Hyprland 0.56.2, Wine 11.18 (Staging) with DXVK, NVIDIA RTX 3060. On **Sway** 1.12 (2026-10-04, same Wine and card) the Wayland driver alone was enough: full screen with no window rule, the pointer stays in the game. Through XWayland on Sway the pointer escaped the screen while turning the camera and the game lost focus.
 
 **ARM64-specific:** no (a desktop/Wine issue, unrelated to the server)
 

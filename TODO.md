@@ -10,7 +10,7 @@ from the text. What is left is optional chapters, modules and upkeep.
 ---
 
 ## Just done
-- [x] **2026-10-07 · `play-wotlk.sh` picks Wine's Wayland driver on Sway too** (was Hyprland only). Through XWayland on Sway the pointer escaped the screen while turning the camera (hypeForge F-43, jetomev/forge-suite#25). The script, Chapter 08 and Troubleshooting updated; the live copy in `~/Games/ChromieCraft_3.3.5a/` too. Still to prove: one start from the launcher on Sway, pointer stays in the game
+- [x] **2026-10-07 · `play-wotlk.sh` picks Wine's Wayland driver on Sway too** (was Hyprland only). Through XWayland on Sway the pointer escaped the screen while turning the camera (hypeForge F-43, jetomev/forge-suite#25). The script, Chapter 08 and Troubleshooting updated; the live copy in `~/Games/ChromieCraft_3.3.5a/` too. **Proven 2026-10-07 19:40**: started from the launcher on Sway, full screen, the pointer stayed in the game (forge-suite#25 closed). Found: switching to windowed mode in-game under Wine's Wayland driver makes the window vanish while the game runs on → a Troubleshooting note to write
 
 ## Next up
 
